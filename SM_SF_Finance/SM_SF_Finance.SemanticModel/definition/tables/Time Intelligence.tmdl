@@ -1,0 +1,88 @@
+/// Time calculations for any measure: Current, PM, PY, fiscal YTD, PY YTD, MoM % and YoY %. Balance measures return the balance itself for YTD.
+table 'Time Intelligence'
+	lineageTag: e56f402a-ea2a-4052-94d9-4950f843f9e1
+
+	calculationGroup
+
+		calculationItem Current = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem PM = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[Date], -1, MONTH ) )
+			ordinal: 1
+
+		calculationItem PY = CALCULATE ( SELECTEDMEASURE (), SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+			ordinal: 2
+
+		calculationItem YTD =
+				
+				VAR AsOfDate = MAX ( 'Date'[Date] )
+				VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
+				RETURN
+				    IF (
+				        ISSELECTEDMEASURE ( [Closing Balance], [Closing Balance PM], [Balance Trend MoM] ),
+				        SELECTEDMEASURE (),
+				        CALCULATE (
+				            SELECTEDMEASURE (),
+				            REMOVEFILTERS ( 'Date' ),
+				            'Date'[Fiscal Year] = AsOfFiscalYear,
+				            'Date'[Date] <= AsOfDate
+				        )
+				    )
+			ordinal: 3
+
+		calculationItem 'PY YTD' =
+				
+				CALCULATE (
+				    SELECTEDMEASURE (),
+				    'Time Intelligence'[Time Calculation] = "YTD",
+				    SAMEPERIODLASTYEAR ( 'Date'[Date] )
+				)
+			ordinal: 4
+
+		calculationItem 'MoM %' =
+				
+				VAR CurrentValue = SELECTEDMEASURE ()
+				VAR PriorValue = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Date'[Date], -1, MONTH ) )
+				RETURN
+				    IF (
+				        NOT ISSELECTEDMEASURE ( [Balance Trend MoM] ),
+				        DIVIDE ( CurrentValue - PriorValue, ABS ( PriorValue ) )
+				    )
+			ordinal: 5
+
+			formatStringDefinition = "0.00%;-0.00%;0.00%"
+
+		calculationItem 'YoY %' =
+				
+				VAR CurrentValue = SELECTEDMEASURE ()
+				VAR PriorValue = CALCULATE ( SELECTEDMEASURE (), SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+				RETURN
+				    IF (
+				        NOT ISSELECTEDMEASURE ( [Balance Trend MoM] ),
+				        DIVIDE ( CurrentValue - PriorValue, ABS ( PriorValue ) )
+				    )
+			ordinal: 6
+
+			formatStringDefinition = "0.00%;-0.00%;0.00%"
+
+	column 'Time Calculation'
+		dataType: string
+		lineageTag: a50d392b-1faa-4b84-9026-4cb744a14794
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 520ddb97-9990-40b5-8a35-59302da8c9af
+		summarizeBy: none
+		sourceColumn: Ordinal
+
+		annotation SummarizationSetBy = User
+
+	partition 'Time Intelligence' = calculationGroup
+		mode: import

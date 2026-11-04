@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "DIMENTITY"
+                      "Entity": "Entity"
                     }
                   },
                   "Property": "Entity"
                 }
               },
-              "queryRef": "DIMENTITY.Entity",
+              "queryRef": "Entity.Entity",
               "nativeQueryRef": "Entity"
             }
           ]
@@ -157,7 +157,7 @@
                 "From": [
                   {
                     "Name": "d",
-                    "Entity": "DIMENTITY",
+                    "Entity": "Entity",
                     "Type": 0
                   }
                 ],
@@ -211,7 +211,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "DIMENTITY"
+                "Entity": "Entity"
               }
             },
             "Property": "Entity"

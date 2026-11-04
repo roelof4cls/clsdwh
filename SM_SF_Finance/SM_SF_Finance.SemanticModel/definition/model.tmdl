@@ -1,5 +1,6 @@
 model Model
 	culture: en-US
+	discourageImplicitMeasures
 	defaultPowerBIDataSourceVersion: powerBI_V3
 	sourceQueryCulture: en-ZA
 	dataAccessOptions
@@ -8,19 +9,21 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["DIMENTITY","DIMDATE","DIMACCOUNT","DIMCONTACT","DIMBANKACCOUNT","FACTBALANCE","FACTBUDGETVSACTUAL","FACTGENERALLEDGER","FACTFORECAST"]
+annotation PBI_QueryOrder = ["Date", "Entity", "Account", "Contact", "Bank Account", "General Ledger", "Budget vs Actual", "Bank Balance", "Cash Flow Forecast"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
-ref table DIMACCOUNT
-ref table DIMBANKACCOUNT
-ref table DIMCONTACT
-ref table DIMDATE
-ref table FACTBALANCE
-ref table FACTBUDGETVSACTUAL
-ref table FACTGENERALLEDGER
-ref table DIMENTITY
-ref table FACTFORECAST
+ref table Account
+ref table 'Bank Account'
+ref table Contact
+ref table Date
+ref table 'Bank Balance'
+ref table 'Budget vs Actual'
+ref table 'General Ledger'
+ref table Entity
+ref table 'Cash Flow Forecast'
+ref table _Measures
+ref table 'Time Intelligence'
 
 ref cultureInfo en-US
 

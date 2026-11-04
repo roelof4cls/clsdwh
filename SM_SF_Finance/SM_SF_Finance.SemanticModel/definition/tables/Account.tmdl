@@ -1,7 +1,8 @@
-table DIMACCOUNT
+/// Xero chart of accounts, one set per entity.
+table Account
 	lineageTag: 47bde03a-059b-4860-a7aa-a01e964ecb41
 
-	measure AccountFilterCount = COUNT(FACTGENERALLEDGER[General Ledger Key]) + COUNT(FACTBUDGETVSACTUAL[Budget Vs Actual Key])
+	measure AccountFilterCount = COUNT('General Ledger'[General Ledger Key]) + COUNT('Budget vs Actual'[Budget Vs Actual Key])
 		formatString: 0
 		lineageTag: 8257c1d5-2669-4418-ac26-0190ac13332b
 
@@ -70,7 +71,7 @@ table DIMACCOUNT
 
 	column 'Is Essential'
 		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		formatString: """Yes"";""Yes"";""No"""
 		displayFolder: ATTRIBUTES
 		lineageTag: b1fcadad-1ba6-457e-87bc-4d9efb0169ee
 		summarizeBy: none
@@ -80,7 +81,7 @@ table DIMACCOUNT
 
 	column 'Is Once Off'
 		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		formatString: """Yes"";""Yes"";""No"""
 		displayFolder: ATTRIBUTES
 		lineageTag: 9ce60a0a-5c53-4deb-8489-125191a54956
 		summarizeBy: none
@@ -90,7 +91,7 @@ table DIMACCOUNT
 
 	column 'Is Budgetable'
 		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		formatString: """Yes"";""Yes"";""No"""
 		displayFolder: ATTRIBUTES
 		lineageTag: f3187011-5419-48cf-8167-691a3277ffac
 		summarizeBy: none
@@ -183,7 +184,26 @@ table DIMACCOUNT
 
 		annotation SummarizationSetBy = Automatic
 
-	partition DIMACCOUNT = m
+	hierarchy 'Account Hierarchy'
+		lineageTag: 94353741-9e8d-42d1-93af-a6dfe62d6257
+
+		level 'Account Category'
+			lineageTag: a3a60b9c-778f-494e-b008-52fcaaf2b26f
+			column: 'Account Category'
+
+		level 'Account Sub Category'
+			lineageTag: c8e343f4-1810-449e-b42a-42e1a0c34d26
+			column: 'Account Sub Category'
+
+		level 'Account Group'
+			lineageTag: 3f6d2a8e-5b1c-4e7a-9c0d-8a2b4e6f1d37
+			column: 'Account Group'
+
+		level Account
+			lineageTag: 85607fe5-36a8-4334-af2d-7bbcf2d56f92
+			column: Account
+
+	partition Account = m
 		mode: import
 		source =
 				let

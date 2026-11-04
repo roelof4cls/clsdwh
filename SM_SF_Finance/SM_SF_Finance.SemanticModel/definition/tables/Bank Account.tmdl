@@ -1,7 +1,8 @@
-table DIMBANKACCOUNT
+/// Xero bank accounts, one set per entity.
+table 'Bank Account'
 	lineageTag: 99c8f7a8-b1e7-4ef4-8af4-edf0fd80d6f5
 
-	measure BankAccountFilterCount = COUNT(FACTGENERALLEDGER[General Ledger Key]) + COUNT(FACTBALANCE[Fact Balance Key])
+	measure BankAccountFilterCount = COUNT('General Ledger'[General Ledger Key]) + COUNT('Bank Balance'[Fact Balance Key])
 		formatString: 0
 		lineageTag: 0c0b2140-488f-4170-9a32-f02ed2416ec9
 
@@ -72,7 +73,7 @@ table DIMBANKACCOUNT
 
 	column 'Include In Actual'
 		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		formatString: """Yes"";""Yes"";""No"""
 		displayFolder: ATTRIBUTES
 		lineageTag: 03cfc4b4-b1b8-4761-970a-b11cb7c396b1
 		summarizeBy: none
@@ -82,7 +83,7 @@ table DIMBANKACCOUNT
 
 	column 'Primary Account'
 		dataType: boolean
-		formatString: """TRUE"";""TRUE"";""FALSE"""
+		formatString: """Yes"";""Yes"";""No"""
 		displayFolder: ATTRIBUTES
 		lineageTag: 276bccbd-3354-4c87-b943-235db1141ef2
 		summarizeBy: none
@@ -99,7 +100,18 @@ table DIMBANKACCOUNT
 
 		annotation SummarizationSetBy = Automatic
 
-	partition DIMBANKACCOUNT = m
+	hierarchy 'Bank Hierarchy'
+		lineageTag: 501910d8-28d8-47bc-9b32-d69e89950f33
+
+		level 'Bank Institution'
+			lineageTag: cd2afb60-7418-4ba3-ae0d-32d616c99432
+			column: 'Bank Institution'
+
+		level 'Bank Account'
+			lineageTag: 29fbef49-36a8-485f-a047-535313aec850
+			column: 'Bank Account'
+
+	partition 'Bank Account' = m
 		mode: import
 		source =
 				let

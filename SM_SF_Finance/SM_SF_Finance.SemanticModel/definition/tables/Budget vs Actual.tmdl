@@ -1,0 +1,145 @@
+/// Monthly budget, actual, forecast and project amounts per account.
+table 'Budget vs Actual'
+	lineageTag: 35aa7f1d-2d15-4e87-b6c3-5ce9a3492ba9
+
+	column 'Budget Vs Actual Key'
+		dataType: string
+		isHidden
+		displayFolder: KEYS
+		lineageTag: f704b2ce-65bd-4b2c-af25-8c8d3e0279f9
+		summarizeBy: none
+		sourceColumn: Budget Vs Actual Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date Key'
+		dataType: double
+		isHidden
+		displayFolder: KEYS
+		lineageTag: f5d5c7b7-3d41-4f62-a7af-30457932ef6e
+		summarizeBy: none
+		sourceColumn: Date Key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Account Key'
+		dataType: string
+		isHidden
+		displayFolder: KEYS
+		lineageTag: 8ba876c4-4be6-46e8-b2b4-864da80fdc9c
+		summarizeBy: none
+		sourceColumn: Account Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Budgeted
+		dataType: boolean
+		formatString: """Yes"";""Yes"";""No"""
+		displayFolder: ATTRIBUTES
+		lineageTag: d10f42b2-2794-4033-a0c9-6f15a172804c
+		summarizeBy: none
+		sourceColumn: Budgeted
+
+		annotation SummarizationSetBy = Automatic
+
+	column vBudgetAmount
+		dataType: double
+		isHidden
+		displayFolder: VALUES
+		lineageTag: dd5be4d0-b88e-4e34-900a-d08f7f7c48e9
+		summarizeBy: none
+		sourceColumn: vBudgetAmount
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vActualAmount
+		dataType: double
+		isHidden
+		displayFolder: VALUES
+		lineageTag: f49fee69-5c72-43b4-af7a-da8f074ea5c7
+		summarizeBy: none
+		sourceColumn: vActualAmount
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vForecastAmount
+		dataType: double
+		isHidden
+		displayFolder: VALUES
+		lineageTag: 8d0539a6-7f83-4c38-8268-07504f9072c6
+		summarizeBy: none
+		sourceColumn: vForecastAmount
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vProjectAmount
+		dataType: double
+		isHidden
+		displayFolder: VALUES
+		lineageTag: a73db32b-5bb4-42d0-b1dc-c5df6343fc01
+		summarizeBy: none
+		sourceColumn: vProjectAmount
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Entity Key'
+		dataType: string
+		isHidden
+		displayFolder: KEYS
+		lineageTag: b81cafc5-35c5-4b69-9054-9c6e5125b09f
+		summarizeBy: none
+		sourceColumn: Entity Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Budget Description' = IF('Budget vs Actual'[Budgeted]=TRUE,"Budget","Non-Budget")
+		displayFolder: ATTRIBUTES
+		lineageTag: f4c2eb03-875a-42f8-8fa1-223b802bb11a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Forecast Type'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 19409c89-6f41-4690-a86d-688f73bc136e
+		summarizeBy: none
+		sourceColumn: Forecast Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Once Off'
+		dataType: boolean
+		formatString: """Yes"";""Yes"";""No"""
+		displayFolder: ATTRIBUTES
+		lineageTag: f2477de3-9d90-4fb7-a597-3e1d5ff7b288
+		summarizeBy: none
+		sourceColumn: Is Once Off
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Budget vs Actual' = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("LNJLAGM-CN49845.snowflakecomputing.com","POWERBI_WH",[Implementation="2.0"]),
+				    CLS_Database = Source{[Name="CLS",Kind="Database"]}[Data],
+				    SEMANTIC_Schema = CLS_Database{[Name="SEMANTIC",Kind="Schema"]}[Data],
+				    VW_SEM_FACTBUDGETVSACTUAL_View = SEMANTIC_Schema{[Name="VW_SEM_FACTBUDGETVSACTUAL_LIVE",Kind="View"]}[Data]
+				in
+				    VW_SEM_FACTBUDGETVSACTUAL_View
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

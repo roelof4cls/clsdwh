@@ -7,7 +7,7 @@ cultureInfo en-US
 			  "Entities": {
 			    "factgeneralledger.total_vat_incl": {
 			      "Binding": {
-			        "ConceptualEntity": "FACTGENERALLEDGER",
+			        "ConceptualEntity": "_Measures",
 			        "ConceptualProperty": "Total (VAT Incl)"
 			      },
 			      "State": "Generated"

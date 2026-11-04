@@ -1,4 +1,5 @@
-table DIMENTITY
+/// Business entity (Xero organisation): CLS, CLI or RLR. Entities are reported separately.
+table Entity
 	lineageTag: 4cb90b2b-0be3-4efb-9f4a-511cdfdc3620
 
 	column 'Entity Key'
@@ -26,7 +27,7 @@ table DIMENTITY
 
 		annotation SummarizationSetBy = Automatic
 
-	partition DIMENTITY = m
+	partition Entity = m
 		mode: import
 		source =
 				let

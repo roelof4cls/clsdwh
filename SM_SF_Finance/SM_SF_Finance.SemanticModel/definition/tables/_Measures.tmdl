@@ -1,0 +1,525 @@
+/// All model measures, grouped by subject area. Archive holds explicit time measures replaced by the Time Intelligence calculation group.
+table _Measures
+	lineageTag: 15cdb6b8-f506-4e6d-aaf6-a3815a5e3231
+
+	/// Sum of credit amounts on general ledger lines.
+	measure Credit = SUM ( 'General Ledger'[vCreditAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: 11877ec3-2620-465e-b4b9-34611fc686f5
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Sum of debit amounts on general ledger lines.
+	measure Debit = SUM ( 'General Ledger'[vDebitAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: 794c2ece-3c6b-408f-841d-4edb931e4801
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Line amount plus tax.
+	measure 'Total (VAT Incl)' = [Total (VAT Excl)] + [Tax]
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: c18aa417-de2f-42f5-9d13-0a1c03c16e39
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Line amount excluding tax.
+	measure 'Total (VAT Excl)' = SUM ( 'General Ledger'[vLineAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: d2f6bb45-3ee4-41f3-91a2-60cefee5f2ff
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Tax (VAT) amount on general ledger lines.
+	measure Tax = SUM ( 'General Ledger'[vTaxAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: 81c96208-352e-469a-8748-906924066825
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Number of general ledger lines.
+	measure Transactions = COUNTROWS ( 'General Ledger' )
+		formatString: 0
+		displayFolder: General Ledger
+		lineageTag: bbcc2d65-4364-47eb-8ca2-1e956880d104
+
+	/// Median line amount (VAT excl) of general ledger lines.
+	measure 'Median Line Amount' = MEDIAN ( 'General Ledger'[vLineAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: e7eb2c6a-7e93-4328-82cb-69588d092131
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Number of distinct months that have general ledger lines.
+	measure 'Months With Transactions' = COUNTROWS ( SUMMARIZE ( 'General Ledger', 'Date'[Calendar Month Key] ) )
+		formatString: 0
+		displayFolder: General Ledger
+		lineageTag: bea8d664-a1d2-44bf-a74f-4b75f98846a5
+
+	/// General ledger amount including VAT (line amount + tax). Intentionally VAT-inclusive; base measure for all GL time-intelligence measures.
+	measure 'GL Amount' = [Total (VAT Incl)]
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: 81c45caf-f737-446d-b557-a5720bd54f62
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Cumulative Total (VAT Incl) over the selected dates.
+	measure 'Running Total (VAT Incl)' =
+
+			CALCULATE(
+				[Total (VAT Incl)],
+				FILTER(
+					ALLSELECTED('Date'[Date]),
+					ISONORAFTER('Date'[Date], MAX('Date'[Date]), DESC)
+				)
+			)
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: b9b44de8-ca38-47f4-ae85-15e95748982e
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "RunningTotal"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'GL Amount YTD' =
+
+			VAR AsOfDate = MAX ( 'Date'[Date] )
+			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [GL Amount],
+			        REMOVEFILTERS ( 'Date' ),
+			        'Date'[Fiscal Year] = AsOfFiscalYear,
+			        'Date'[Date] <= AsOfDate
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\General Ledger
+		lineageTag: b1dfaf4e-dca0-4458-8135-30c29621f6a4
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'GL Amount PY' = CALCULATE ( [GL Amount], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\General Ledger
+		lineageTag: 73061422-92cd-4851-9c73-0e7c69524847
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'GL Amount PM' = CALCULATE ( [GL Amount], DATEADD ( 'Date'[Date], -1, MONTH ) )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\General Ledger
+		lineageTag: b321351d-61e6-4f68-a54f-020134f7bc3d
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'GL Amount YoY %' =
+
+			VAR CurrentAmt = [GL Amount]
+			VAR PriorAmt = [GL Amount PY]
+			RETURN
+			    DIVIDE ( CurrentAmt - PriorAmt, PriorAmt )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Archive\General Ledger
+		lineageTag: 0aa446a0-e409-4fe2-85ed-43f8dafce57e
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'GL Amount MoM %' =
+
+			VAR CurrentAmt = [GL Amount]
+			VAR PriorAmt = [GL Amount PM]
+			RETURN
+			    DIVIDE ( CurrentAmt - PriorAmt, PriorAmt )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Archive\General Ledger
+		lineageTag: 67a99db0-e8fd-4464-a778-a61e058f02d5
+
+	/// GL Amount for the current fiscal year up to the last completed fiscal month.
+	measure 'GL Amount Comparable' =
+
+			VAR ElapsedFiscalMonths =
+			    CALCULATE (
+			        MAX ( 'Date'[Fiscal Month Number] ),
+			        'Date'[Is Fiscal Past Month] = TRUE (),
+			        'Date'[Is Fiscal Current Year] = TRUE ()
+			    )
+			RETURN
+			    CALCULATE (
+			        [GL Amount],
+			        'Date'[Fiscal Month Number] <= ElapsedFiscalMonths,
+			        'Date'[Is Fiscal Current Year] = TRUE ()
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: 4a178ff2-febb-4699-843b-27f9ad1728d0
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// GL Amount for the previous fiscal year over the same number of fiscal months as GL Amount Comparable.
+	measure 'GL Amount PY Comparable' =
+
+			VAR ElapsedFiscalMonths =
+			    CALCULATE (
+			        MAX ( 'Date'[Fiscal Month Number] ),
+			        'Date'[Is Fiscal Past Month] = TRUE (),
+			        'Date'[Is Fiscal Current Year] = TRUE ()
+			    )
+			RETURN
+			    CALCULATE (
+			        [GL Amount],
+			        'Date'[Fiscal Month Number] <= ElapsedFiscalMonths,
+			        'Date'[Is Fiscal Previous Year] = TRUE ()
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: General Ledger
+		lineageTag: 267550f8-05ff-4596-b59c-46efe23d2b00
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Actual amount from Budget vs Actual.
+	measure Actual = SUM ( 'Budget vs Actual'[vActualAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Budget vs Actual
+		lineageTag: 6f12353e-8269-4d34-a907-b5a2484cc4ef
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Budget amount.
+	measure Budget = SUM ( 'Budget vs Actual'[vBudgetAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Budget vs Actual
+		lineageTag: 00fd9914-2311-4a10-ad15-bf67cb21a838
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Forecast amount from Budget vs Actual (not the cash flow forecast).
+	measure Forecast = SUM ( 'Budget vs Actual'[vForecastAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Budget vs Actual
+		lineageTag: 123dadd5-def5-4ccd-be9e-1b6e431b6e7d
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Project amount from Budget vs Actual.
+	measure Project = SUM ( 'Budget vs Actual'[vProjectAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Budget vs Actual
+		lineageTag: c42e35c3-26ba-481b-a671-e97656669498
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Forecast minus Budget.
+	measure 'Forecast Variance' = [Forecast] - [Budget]
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Budget vs Actual
+		lineageTag: b3e49f60-a4c6-4e80-aaa6-a3c41a7818f6
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Forecast Variance as a percentage of the absolute Budget. Blank when there is no budget.
+	measure 'Forecast Variance %' = DIVIDE ( [Forecast Variance], ABS ( [Budget] ) )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Budget vs Actual
+		lineageTag: 95afb788-ffbd-4986-8209-b888a90bfd13
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Actual YTD' =
+
+			VAR AsOfDate = MAX ( 'Date'[Date] )
+			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [Actual],
+			        REMOVEFILTERS ( 'Date' ),
+			        'Date'[Fiscal Year] = AsOfFiscalYear,
+			        'Date'[Date] <= AsOfDate
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: f153fb4b-c290-4791-8cbb-1617bffbb07c
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Budget YTD' =
+
+			VAR AsOfDate = MAX ( 'Date'[Date] )
+			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [Budget],
+			        REMOVEFILTERS ( 'Date' ),
+			        'Date'[Fiscal Year] = AsOfFiscalYear,
+			        'Date'[Date] <= AsOfDate
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: 59d1f05c-797e-4ab4-92a2-75fd83455abb
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Forecast YTD' =
+
+			VAR AsOfDate = MAX ( 'Date'[Date] )
+			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [Forecast],
+			        REMOVEFILTERS ( 'Date' ),
+			        'Date'[Fiscal Year] = AsOfFiscalYear,
+			        'Date'[Date] <= AsOfDate
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: 6b039215-318e-485f-b34f-468e91dbb906
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Forecast from the last date in context to the end of that fiscal year.
+	measure 'Forecast Remaining FY' =
+
+			VAR AsOfDate = MAX ( 'Date'[Date] )
+			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [Forecast],
+			        REMOVEFILTERS ( 'Date' ),
+			        'Date'[Fiscal Year] = AsOfFiscalYear,
+			        'Date'[Date] >= AsOfDate
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Budget vs Actual
+		lineageTag: 6fa4ce56-8fbc-4b3e-8921-b8554bfff865
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Actual PY' = CALCULATE ( [Actual], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: f238cb50-c1b1-40e7-8614-62d503d035d1
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Budget PY' = CALCULATE ( [Budget], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: fe8b33ad-d8e8-45d5-a966-1114cde397b0
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Budget YoY Variance %' =
+
+			VAR PriorBudget = [Budget PY]
+			RETURN
+			    DIVIDE ( [Budget] - PriorBudget, ABS ( PriorBudget ) )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: f1c226a4-5cc7-4d71-8b33-ebd2d74e155e
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Forecast PY' = CALCULATE ( [Forecast], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: 032b2ba5-b74f-4d6b-a293-8eeb6047e67d
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Forecast YoY' = [Forecast] - [Forecast PY]
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: 101f918b-1c03-498a-8aa5-b630f5a5edcb
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Forecast YoY %' = DIVIDE ( [Forecast YoY], [Forecast PY] )
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Archive\Budget vs Actual
+		lineageTag: 0787677d-3e2e-438b-a224-726aa0cff0e6
+
+	/// Sum of all balance rows in context: the fiscal-year opening BALANCE rows plus movements.
+	measure 'Bank Transaction Amount' = SUM ( 'Bank Balance'[vTransactionAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Bank Balance
+		lineageTag: 216088dd-e629-40de-9aa0-305ba4875b54
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Movements only, excluding the fiscal-year opening BALANCE rows.
+	measure 'Bank Movement Amount' = CALCULATE ( [Bank Transaction Amount], 'Bank Balance'[Transaction Type] <> "BALANCE" )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Bank Balance
+		lineageTag: a1a99168-6b80-47cb-9e09-2bc485b8767b
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Bank balance at the last date in context: the fiscal year's opening BALANCE row plus movements up to that date. Never later than the last balance transaction; blank for periods entirely after it.
+	measure 'Closing Balance' =
+
+			VAR LastTransactionDate =
+			    CALCULATE ( MAXX ( 'Bank Balance', RELATED ( 'Date'[Date] ) ), REMOVEFILTERS ( 'Date' ) )
+			VAR AsOfDate = MIN ( MAX ( 'Date'[Date] ), LastTransactionDate )
+			VAR AsOfFiscalYear = LOOKUPVALUE ( 'Date'[Fiscal Year], 'Date'[Date], AsOfDate )
+			RETURN
+			    IF (
+			        MIN ( 'Date'[Date] ) <= LastTransactionDate,
+			        CALCULATE (
+			            [Bank Transaction Amount],
+			            REMOVEFILTERS ( 'Date' ),
+			            'Date'[Fiscal Year] = AsOfFiscalYear,
+			            'Date'[Date] <= AsOfDate
+			        )
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Bank Balance
+		lineageTag: b13a440b-43c6-4444-a9ea-c181f201a5eb
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Closing Balance at the end of the month before the last date in context.
+	measure 'Closing Balance PM' =
+
+			VAR LastTransactionDate =
+			    CALCULATE ( MAXX ( 'Bank Balance', RELATED ( 'Date'[Date] ) ), REMOVEFILTERS ( 'Date' ) )
+			VAR AsOfDate = MIN ( MAX ( 'Date'[Date] ), LastTransactionDate )
+			RETURN
+			    CALCULATE (
+			        [Closing Balance],
+			        REMOVEFILTERS ( 'Date' ),
+			        'Date'[Date] = EOMONTH ( AsOfDate, -1 )
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Bank Balance
+		lineageTag: 35a80dad-a4e0-42a0-ab94-0032343cc434
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Direction of Closing Balance compared with Closing Balance PM.
+	measure 'Balance Trend MoM' =
+
+			VAR CurrentBalance = [Closing Balance]
+			VAR PriorBalance = [Closing Balance PM]
+			RETURN
+			    IF (
+			        NOT ISBLANK ( CurrentBalance ),
+			        SWITCH (
+			            TRUE (),
+			            CurrentBalance > PriorBalance, "▲ Up",
+			            CurrentBalance < PriorBalance, "▼ Down",
+			            "► Flat"
+			        )
+			    )
+		displayFolder: Bank Balance
+		lineageTag: 7abb7f45-be47-49d2-8ef4-9ab887268f2e
+
+	/// Balance + forecast + safety net amounts.
+	measure 'Cash Flow Total' = [Cash Flow Balance] + [Cash Flow Forecast Amount] + [Cash Flow Safety Net]
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Cash Flow Forecast
+		lineageTag: bb75455b-f653-4b8e-a468-c78fd947f1fe
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Cash Flow Total YTD' =
+
+			VAR AsOfDate = MAX ( 'Date'[Date] )
+			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [Cash Flow Total],
+			        REMOVEFILTERS ( 'Date' ),
+			        'Date'[Fiscal Year] = AsOfFiscalYear,
+			        'Date'[Date] <= AsOfDate
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Cash Flow Forecast
+		lineageTag: de32dfab-838c-4810-92e0-cc9ad5b50dfe
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Forecast amount from the cash flow forecast.
+	measure 'Cash Flow Forecast Amount' = SUM ( 'Cash Flow Forecast'[vForecastAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Cash Flow Forecast
+		lineageTag: 037c39dc-88b4-4eb4-91ae-ead782e8b16a
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Balance amount from the cash flow forecast.
+	measure 'Cash Flow Balance' = SUM ( 'Cash Flow Forecast'[vBalanceAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Cash Flow Forecast
+		lineageTag: afc2c148-0170-4ef3-93f6-c87069324dac
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Safety net amount from the cash flow forecast.
+	measure 'Cash Flow Safety Net' = SUM ( 'Cash Flow Forecast'[vSafetynetAmount] )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Cash Flow Forecast
+		lineageTag: ae83ab2a-ab88-41b2-a39e-11a5575fcfb0
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Balance + forecast amounts, excluding the safety net.
+	measure 'Cash Flow Total Excl Safety Net' = [Cash Flow Balance] + [Cash Flow Forecast Amount]
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Cash Flow Forecast
+		lineageTag: 8ca854f0-66e6-42f9-b784-2a894e10cafd
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Archived: use the Time Intelligence calculation group instead.
+	measure 'Cash Flow Total Excl Safety Net YTD' =
+
+			VAR AsOfDate = MAX ( 'Date'[Date] )
+			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [Cash Flow Total Excl Safety Net],
+			        REMOVEFILTERS ( 'Date' ),
+			        'Date'[Fiscal Year] = AsOfFiscalYear,
+			        'Date'[Date] <= AsOfDate
+			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: Archive\Cash Flow Forecast
+		lineageTag: 0afb7194-8fe9-4117-8c9b-16afa4d6ddaf
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 203f8691-61dd-4a86-aa65-4ec852f4c686
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition _Measures = calculated
+		mode: import
+		source = {0}

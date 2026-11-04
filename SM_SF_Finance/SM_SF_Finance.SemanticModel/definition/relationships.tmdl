@@ -1,57 +1,57 @@
 relationship AutoDetected_5b873704-b272-4d0a-9761-6e88ead87bd9
-	fromColumn: FACTBUDGETVSACTUAL.'Account Key'
-	toColumn: DIMACCOUNT.'Account Key'
+	fromColumn: 'Budget vs Actual'.'Account Key'
+	toColumn: Account.'Account Key'
 
 relationship AutoDetected_980ec0b9-ded0-486d-aef6-1af954bb9a45
-	fromColumn: FACTGENERALLEDGER.'Account Key'
-	toColumn: DIMACCOUNT.'Account Key'
+	fromColumn: 'General Ledger'.'Account Key'
+	toColumn: Account.'Account Key'
 
 relationship AutoDetected_d5fe1ebb-0372-4d8e-8e7f-9f62a79bc969
-	fromColumn: FACTBALANCE.'Bank Account Key'
-	toColumn: DIMBANKACCOUNT.'Bank Account Key'
+	fromColumn: 'Bank Balance'.'Bank Account Key'
+	toColumn: 'Bank Account'.'Bank Account Key'
 
 relationship AutoDetected_c72f94dc-11d9-4988-9242-a3e28e0eda14
-	fromColumn: FACTGENERALLEDGER.'Bank Account Key'
-	toColumn: DIMBANKACCOUNT.'Bank Account Key'
+	fromColumn: 'General Ledger'.'Bank Account Key'
+	toColumn: 'Bank Account'.'Bank Account Key'
 
 relationship AutoDetected_694a92cf-4d14-4301-8fb8-886889555f77
-	fromColumn: FACTGENERALLEDGER.'Contact Key'
-	toColumn: DIMCONTACT.'Contact Key'
+	fromColumn: 'General Ledger'.'Contact Key'
+	toColumn: Contact.'Contact Key'
 
 relationship AutoDetected_b2c9700a-8d87-4706-94a7-21ca5dc3c391
-	fromColumn: FACTBALANCE.'Date Key'
-	toColumn: DIMDATE.'Date Key'
+	fromColumn: 'Bank Balance'.'Date Key'
+	toColumn: Date.'Date Key'
 
 relationship AutoDetected_ce203c76-bbad-4b5b-b037-1d73e3437531
-	fromColumn: FACTBUDGETVSACTUAL.'Date Key'
-	toColumn: DIMDATE.'Date Key'
+	fromColumn: 'Budget vs Actual'.'Date Key'
+	toColumn: Date.'Date Key'
 
 relationship AutoDetected_0b9c5a6f-27a0-440c-a780-d30bec6e722d
-	fromColumn: FACTGENERALLEDGER.'Date Key'
-	toColumn: DIMDATE.'Date Key'
+	fromColumn: 'General Ledger'.'Date Key'
+	toColumn: Date.'Date Key'
 
 relationship AutoDetected_e5dba0ba-b2b6-40ff-bbe8-f4f5cba49829
-	fromColumn: FACTBALANCE.'Entity Key'
-	toColumn: DIMENTITY.'Entity Key'
+	fromColumn: 'Bank Balance'.'Entity Key'
+	toColumn: Entity.'Entity Key'
 
 relationship AutoDetected_bea5d8e6-2f6d-48c3-a838-b6854a787e1c
-	fromColumn: FACTBUDGETVSACTUAL.'Entity Key'
-	toColumn: DIMENTITY.'Entity Key'
+	fromColumn: 'Budget vs Actual'.'Entity Key'
+	toColumn: Entity.'Entity Key'
 
 relationship AutoDetected_8bb92b75-3d28-4b63-acbb-b0b89cefcc59
-	fromColumn: FACTGENERALLEDGER.'Entity Key'
-	toColumn: DIMENTITY.'Entity Key'
+	fromColumn: 'General Ledger'.'Entity Key'
+	toColumn: Entity.'Entity Key'
 
 relationship AutoDetected_f6600e4e-bb66-48e2-a307-9d198d78b9d8
-	fromColumn: FACTFORECAST.'Date Key'
-	toColumn: DIMDATE.'Date Key'
+	fromColumn: 'Cash Flow Forecast'.'Date Key'
+	toColumn: Date.'Date Key'
 
 relationship AutoDetected_3869ddc9-b0b7-43cd-8931-1a92f28235df
-	fromColumn: FACTFORECAST.'Entity Key'
-	toColumn: DIMENTITY.'Entity Key'
+	fromColumn: 'Cash Flow Forecast'.'Entity Key'
+	toColumn: Entity.'Entity Key'
 
 relationship AutoDetected_e6190cb8-ee33-4180-abe7-a0cb2ab841ad
 	isActive: false
-	fromColumn: DIMBANKACCOUNT.'Entity Code'
-	toColumn: DIMENTITY.'Entity Code'
+	fromColumn: 'Bank Account'.'Entity Code'
+	toColumn: Entity.'Entity Code'
 

@@ -1,0 +1,91 @@
+/// Bank balances: one opening BALANCE row per bank account per fiscal year, followed by movements.
+table 'Bank Balance'
+	lineageTag: 30aa81bc-1693-48a0-9e2e-70b78fc466fe
+
+	column 'Fact Balance Key'
+		dataType: string
+		isHidden
+		displayFolder: KEYS
+		lineageTag: b42fd3bc-039b-4bef-84e1-6c441b98c773
+		summarizeBy: none
+		sourceColumn: Fact Balance Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date Key'
+		dataType: double
+		isHidden
+		displayFolder: KEYS
+		lineageTag: 4a38fb92-7214-40f9-b2ee-f0d2d55af284
+		summarizeBy: none
+		sourceColumn: Date Key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Bank Account Key'
+		dataType: string
+		isHidden
+		displayFolder: KEYS
+		lineageTag: be4b2376-84bf-4c45-a565-911d94d0e78a
+		summarizeBy: none
+		sourceColumn: Bank Account Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Transaction Type'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: f164878c-fcce-4a9b-99e4-432509c9cd45
+		summarizeBy: none
+		sourceColumn: Transaction Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column vTransactionAmount
+		dataType: double
+		isHidden
+		displayFolder: VALUES
+		lineageTag: 4ba2bbe5-6573-470d-bfd0-61abd64cfcad
+		summarizeBy: none
+		sourceColumn: vTransactionAmount
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Entity Key'
+		dataType: string
+		isHidden
+		displayFolder: ATTRIBUTES
+		lineageTag: 7dba609b-6d1d-4de5-a783-bd49d469936f
+		summarizeBy: none
+		sourceColumn: Entity Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub Account'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: b86f0e77-2fb6-4ae8-9f44-daf1ff008be8
+		summarizeBy: none
+		sourceColumn: Sub Account
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Bank Balance' = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("LNJLAGM-CN49845.snowflakecomputing.com","POWERBI_WH",[Implementation="2.0"]),
+				    CLS_Database = Source{[Name="CLS",Kind="Database"]}[Data],
+				    SEMANTIC_Schema = CLS_Database{[Name="SEMANTIC",Kind="Schema"]}[Data],
+				    VW_SEM_FACTBALANCE_View = SEMANTIC_Schema{[Name="VW_SEM_FACTBALANCE_LIVE",Kind="View"]}[Data]
+				in
+				    VW_SEM_FACTBALANCE_View
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,103 +1,37 @@
 table FACTBALANCE
 	lineageTag: 30aa81bc-1693-48a0-9e2e-70b78fc466fe
 
-	measure 'Transaction Amount' = ```
-			SUM ( FACTBALANCE[vTransactionAmount])
-			
-			```
+	/// Sum of all balance rows in context: the fiscal-year opening BALANCE rows plus movements.
+	measure 'Transaction Amount' = SUM ( FACTBALANCE[vTransactionAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 216088dd-e629-40de-9aa0-305ba4875b54
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Rolling Balance FY' = ```
-			
-			CALCULATE (
-			    [Transaction Amount],
-			    DATESYTD (
-			        DimDate[Date],
-			        "02-28"
-			    )
-			)
-			
-			```
+	/// Movements only, excluding the fiscal-year opening BALANCE rows.
+	measure 'Movement Amount' = CALCULATE ( [Transaction Amount], FACTBALANCE[Transaction Type] <> "BALANCE" )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
-		lineageTag: 65e79d55-f602-421b-82bd-759ed01a5946
+		lineageTag: a1a99168-6b80-47cb-9e09-2bc485b8767b
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Balance Trend CM vs PM' = ```
-			
-			    SWITCH(
-			        TRUE(),
-			        [Balance Current Month] > [Balance Previous Month], "▲ Up",
-			        [Balance Current Month] < [Balance Previous Month], "▼ Down",
-			        "► Flat"
-			    )
-			```
-		displayFolder: KPI
-		lineageTag: 7abb7f45-be47-49d2-8ef4-9ab887268f2e
+	/// Bank balance at the last date in context: the fiscal year's opening BALANCE row plus movements up to that date. Never later than the last balance transaction; blank for periods entirely after it.
+	measure 'Closing Balance' =
 
-	measure 'Balance Previous Month' =
-			
-			VAR EndDate =
-			    CALCULATE (
-			        MAX ( DIMDATE[Date] ),
-			        ALL ( DIMDATE ),
-			        DIMDATE[Is Fiscal Previous Month] = TRUE ()
-			    )
+			VAR LastTransactionDate =
+			    CALCULATE ( MAXX ( FACTBALANCE, RELATED ( DIMDATE[Date] ) ), REMOVEFILTERS ( DIMDATE ) )
+			VAR AsOfDate = MIN ( MAX ( DIMDATE[Date] ), LastTransactionDate )
+			VAR AsOfFiscalYear = LOOKUPVALUE ( DIMDATE[Fiscal Year], DIMDATE[Date], AsOfDate )
 			RETURN
-			    CALCULATE (
-			        [Transaction Amount],
-			        FILTER (
-			            ALL ( DIMDATE ),
-			            DIMDATE[Is Fiscal Current Year] = TRUE ()
-			                && DIMDATE[Date] <= EndDate
-			        )
-			    )
-		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
-		displayFolder: KPI
-		lineageTag: 35a80dad-a4e0-42a0-ab94-0032343cc434
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
-
-	measure 'Balance Current Month' =
-			
-			VAR EndDate =
-			    CALCULATE (
-			        MAX ( DIMDATE[Date] ),
-			        ALL ( DIMDATE ),
-			        DIMDATE[Is Fiscal Current Month] = TRUE ()
-			    )
-			RETURN
-			    CALCULATE (
-			        [Transaction Amount],
-			        FILTER (
-			            ALL ( DIMDATE ),
-			            DIMDATE[Is Fiscal Current Year] = TRUE ()
-			                && DIMDATE[Date] <= EndDate
-			        )
-			    )
-		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
-		displayFolder: KPI
-		lineageTag: 53c74db9-7043-464c-80f2-d3e9f1bf55cd
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
-
-	measure 'Month End Balance' =
-			
-			VAR MonthEndDate =
-			    MAX ( DIMDATE[Date] )
-			RETURN
-			    CALCULATE (
-			        [Transaction Amount],
-			        FILTER (
-			            ALL ( DIMDATE ),
-			            DIMDATE[Date] <= MonthEndDate
-			                && DIMDATE[Fiscal Year]
-			                    = MAX ( DIMDATE[Fiscal Year] )
+			    IF (
+			        MIN ( DIMDATE[Date] ) <= LastTransactionDate,
+			        CALCULATE (
+			            [Transaction Amount],
+			            REMOVEFILTERS ( DIMDATE ),
+			            DIMDATE[Fiscal Year] = AsOfFiscalYear,
+			            DIMDATE[Date] <= AsOfDate
 			        )
 			    )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
@@ -106,12 +40,41 @@ table FACTBALANCE
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Movement Amount' = CALCULATE(SUM(FACTBALANCE[vTransactionAmount]),FACTBALANCE[Transaction Type]<>"BALANCE")
+	/// Closing Balance at the end of the month before the last date in context.
+	measure 'Closing Balance PM' =
+
+			VAR LastTransactionDate =
+			    CALCULATE ( MAXX ( FACTBALANCE, RELATED ( DIMDATE[Date] ) ), REMOVEFILTERS ( DIMDATE ) )
+			VAR AsOfDate = MIN ( MAX ( DIMDATE[Date] ), LastTransactionDate )
+			RETURN
+			    CALCULATE (
+			        [Closing Balance],
+			        REMOVEFILTERS ( DIMDATE ),
+			        DIMDATE[Date] = EOMONTH ( AsOfDate, -1 )
+			    )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
-		lineageTag: a1a99168-6b80-47cb-9e09-2bc485b8767b
+		lineageTag: 35a80dad-a4e0-42a0-ab94-0032343cc434
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	/// Direction of Closing Balance compared with Closing Balance PM.
+	measure 'Balance Trend MoM' =
+
+			VAR CurrentBalance = [Closing Balance]
+			VAR PriorBalance = [Closing Balance PM]
+			RETURN
+			    IF (
+			        NOT ISBLANK ( CurrentBalance ),
+			        SWITCH (
+			            TRUE (),
+			            CurrentBalance > PriorBalance, "▲ Up",
+			            CurrentBalance < PriorBalance, "▼ Down",
+			            "► Flat"
+			        )
+			    )
+		displayFolder: KPI
+		lineageTag: 7abb7f45-be47-49d2-8ef4-9ab887268f2e
 
 	column 'Fact Balance Key'
 		dataType: string

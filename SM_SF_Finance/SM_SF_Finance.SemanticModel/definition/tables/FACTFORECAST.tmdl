@@ -1,65 +1,73 @@
 table FACTFORECAST
 	lineageTag: 4850a088-8964-4802-a858-c658b3f5a414
 
-	measure 'Total Amount' = SUM(FACTFORECAST[vBalanceAmount])+SUM(FACTFORECAST[vForecastAmount])+SUM(FACTFORECAST[vSafetynetAmount])
+	/// Balance + forecast + safety net amounts.
+	measure 'Total Amount' = [Total Balance] + [Total Forecast] + [Total Safety Net]
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: bb75455b-f653-4b8e-a468-c78fd947f1fe
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Forecast FY' =
-			
-			CALCULATE (
-			    [Total Amount],
-			    DATESYTD (
-			        DimDate[Date],
-			        "02-28"
+	/// Total Amount from the start of the fiscal year to the last date in context.
+	measure 'Total Amount YTD' =
+
+			VAR AsOfDate = MAX ( DIMDATE[Date] )
+			VAR AsOfFiscalYear = MAX ( DIMDATE[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [Total Amount],
+			        REMOVEFILTERS ( DIMDATE ),
+			        DIMDATE[Fiscal Year] = AsOfFiscalYear,
+			        DIMDATE[Date] <= AsOfDate
 			    )
-			)
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: de32dfab-838c-4810-92e0-cc9ad5b50dfe
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Total Forecast' = SUm(FACTFORECAST[vForecastAmount])
+	measure 'Total Forecast' = SUM ( FACTFORECAST[vForecastAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 037c39dc-88b4-4eb4-91ae-ead782e8b16a
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Total Balance' = SUM(FACTFORECAST[vBalanceAmount])
+	measure 'Total Balance' = SUM ( FACTFORECAST[vBalanceAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: afc2c148-0170-4ef3-93f6-c87069324dac
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Total Safety Net' = SUM(FACTFORECAST[vSafetynetAmount])
+	measure 'Total Safety Net' = SUM ( FACTFORECAST[vSafetynetAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: ae83ab2a-ab88-41b2-a39e-11a5575fcfb0
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Total Amount Excl' = SUM(FACTFORECAST[vBalanceAmount])+SUM(FACTFORECAST[vForecastAmount])
+	/// Balance + forecast amounts, excluding the safety net.
+	measure 'Total Amount Excl Safety Net' = [Total Balance] + [Total Forecast]
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 8ca854f0-66e6-42f9-b784-2a894e10cafd
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Forecast FY Excl' =
-			
-			CALCULATE (
-			    [Total Amount Excl],
-			    DATESYTD (
-			        DimDate[Date],
-			        "02-28"
+	/// Total Amount Excl Safety Net from the start of the fiscal year to the last date in context.
+	measure 'Total Amount Excl Safety Net YTD' =
+
+			VAR AsOfDate = MAX ( DIMDATE[Date] )
+			VAR AsOfFiscalYear = MAX ( DIMDATE[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [Total Amount Excl Safety Net],
+			        REMOVEFILTERS ( DIMDATE ),
+			        DIMDATE[Fiscal Year] = AsOfFiscalYear,
+			        DIMDATE[Date] <= AsOfDate
 			    )
-			)
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 0afb7194-8fe9-4117-8c9b-16afa4d6ddaf

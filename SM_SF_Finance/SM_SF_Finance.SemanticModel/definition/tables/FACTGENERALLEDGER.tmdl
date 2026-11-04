@@ -1,55 +1,70 @@
 table FACTGENERALLEDGER
 	lineageTag: 912bf3f2-6ddb-4da7-9066-8b6ba7729ffe
 
-	measure Credit = SUM(FACTGENERALLEDGER[vCreditAmount])
+	measure Credit = SUM ( FACTGENERALLEDGER[vCreditAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: 11877ec3-2620-465e-b4b9-34611fc686f5
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure Debit = SUm(FACTGENERALLEDGER[vDebitAmount])
+	measure Debit = SUM ( FACTGENERALLEDGER[vDebitAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: 794c2ece-3c6b-408f-841d-4edb931e4801
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Total (VAT Incl)' = SUm(FACTGENERALLEDGER[vLineAmount])+SUM(FACTGENERALLEDGER[vTaxAmount])
+	measure 'Total (VAT Incl)' = [Total (VAT Excl)] + [Tax]
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: c18aa417-de2f-42f5-9d13-0a1c03c16e39
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Total (VAT Excl)' = SUm(FACTGENERALLEDGER[vLineAmount])
+	measure 'Total (VAT Excl)' = SUM ( FACTGENERALLEDGER[vLineAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: d2f6bb45-3ee4-41f3-91a2-60cefee5f2ff
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure Tax = SUm(FACTGENERALLEDGER[vTaxAmount])
+	measure Tax = SUM ( FACTGENERALLEDGER[vTaxAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: 81c96208-352e-469a-8748-906924066825
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure Transactions = DISTINCTCOUNT(FACTGENERALLEDGER[General Ledger Key])
+	/// Number of general ledger lines.
+	measure Transactions = COUNTROWS ( FACTGENERALLEDGER )
 		formatString: 0
 		displayFolder: KPI/Basic
 		lineageTag: bbcc2d65-4364-47eb-8ca2-1e956880d104
 
-	measure 'Med Amount' = MEDIAN(FACTGENERALLEDGER[vLineAmount])
+	measure 'Med Amount' = MEDIAN ( FACTGENERALLEDGER[vLineAmount] )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: e7eb2c6a-7e93-4328-82cb-69588d092131
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
+	/// Number of distinct months that have general ledger lines.
+	measure 'Monthly Transaction' = COUNTROWS ( SUMMARIZE ( FACTGENERALLEDGER, DIMDATE[Calendar Month Key] ) )
+		formatString: 0
+		displayFolder: KPI/Basic
+		lineageTag: bea8d664-a1d2-44bf-a74f-4b75f98846a5
+
+	/// General ledger amount including VAT (line amount + tax). Intentionally VAT-inclusive; base measure for all GL time-intelligence measures.
+	measure 'GL Amount' = [Total (VAT Incl)]
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/Basic
+		lineageTag: 81c45caf-f737-446d-b557-a5720bd54f62
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
 	measure 'Running Total (VAT Incl)' =
-			
+
 			CALCULATE(
 				[Total (VAT Incl)],
 				FILTER(
@@ -71,46 +86,32 @@ table FACTGENERALLEDGER
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Rolling GL Amount FY' =
-			
-			CALCULATE (
-			    [GL Amount],
-			    DATESYTD (
-			        DimDate[Date],
-			        "02-28"
+	/// GL Amount from the start of the fiscal year to the last date in context.
+	measure 'GL Amount YTD' =
+
+			VAR AsOfDate = MAX ( DIMDATE[Date] )
+			VAR AsOfFiscalYear = MAX ( DIMDATE[Fiscal Year] )
+			RETURN
+			    CALCULATE (
+			        [GL Amount],
+			        REMOVEFILTERS ( DIMDATE ),
+			        DIMDATE[Fiscal Year] = AsOfFiscalYear,
+			        DIMDATE[Date] <= AsOfDate
 			    )
-			)
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: b1dfaf4e-dca0-4458-8135-30c29621f6a4
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'GL Amount' = [Total (VAT Incl)]
-		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
-		displayFolder: KPI/Basic
-		lineageTag: 81c45caf-f737-446d-b557-a5720bd54f62
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
-
-	measure 'GL Amount PY' =
-			
-			CALCULATE(
-			    [GL Amount],
-			    SAMEPERIODLASTYEAR(DimDate[Date])
-			)
+	measure 'GL Amount PY' = CALCULATE ( [GL Amount], SAMEPERIODLASTYEAR ( DIMDATE[Date] ) )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/TimeBased
 		lineageTag: 73061422-92cd-4851-9c73-0e7c69524847
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'GL Amount PM' =
-			
-			CALCULATE(
-			    [GL Amount],
-			    DATEADD(DimDate[Date], -1, MONTH)
-			)
+	measure 'GL Amount PM' = CALCULATE ( [GL Amount], DATEADD ( DIMDATE[Date], -1, MONTH ) )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/TimeBased
 		lineageTag: b321351d-61e6-4f68-a54f-020134f7bc3d
@@ -118,69 +119,66 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'GL Amount YoY %' =
-			
+
 			VAR CurrentAmt = [GL Amount]
 			VAR PriorAmt = [GL Amount PY]
 			RETURN
-			DIVIDE(CurrentAmt - PriorAmt, PriorAmt)
+			    DIVIDE ( CurrentAmt - PriorAmt, PriorAmt )
 		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: KPI/TimeBased
 		lineageTag: 0aa446a0-e409-4fe2-85ed-43f8dafce57e
 
 	measure 'GL Amount MoM %' =
-			
+
 			VAR CurrentAmt = [GL Amount]
 			VAR PriorAmt = [GL Amount PM]
 			RETURN
-			DIVIDE(CurrentAmt - PriorAmt, PriorAmt)
+			    DIVIDE ( CurrentAmt - PriorAmt, PriorAmt )
 		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: KPI/TimeBased
 		lineageTag: 67a99db0-e8fd-4464-a778-a61e058f02d5
 
+	/// GL Amount for the current fiscal year up to the last completed fiscal month.
 	measure 'GL Amount Comparable' =
-			
+
 			VAR ElapsedFiscalMonths =
-			    CALCULATE(
-			        MAX(DimDate[Fiscal Month Number]),
-			        DimDate[Is Fiscal Past Month] = TRUE(),
-			        DimDate[Is Fiscal Current Year] = TRUE()
+			    CALCULATE (
+			        MAX ( DIMDATE[Fiscal Month Number] ),
+			        DIMDATE[Is Fiscal Past Month] = TRUE (),
+			        DIMDATE[Is Fiscal Current Year] = TRUE ()
 			    )
 			RETURN
-			CALCULATE(
-			    [GL Amount],
-			    DimDate[Fiscal Month Number] <= ElapsedFiscalMonths,
-			    DimDate[Is Fiscal Current Year] = TRUE()
-			)
+			    CALCULATE (
+			        [GL Amount],
+			        DIMDATE[Fiscal Month Number] <= ElapsedFiscalMonths,
+			        DIMDATE[Is Fiscal Current Year] = TRUE ()
+			    )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/TimeBased
 		lineageTag: 4a178ff2-febb-4699-843b-27f9ad1728d0
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
+	/// GL Amount for the previous fiscal year over the same number of fiscal months as GL Amount Comparable.
 	measure 'GL Amount PY Comparable' =
-			
+
 			VAR ElapsedFiscalMonths =
-			    CALCULATE(
-			        MAX(DimDate[Fiscal Month Number]),
-			        DimDate[Is Fiscal Past Month] = TRUE(),
-			        DimDate[Is Fiscal Current Year] = TRUE()
+			    CALCULATE (
+			        MAX ( DIMDATE[Fiscal Month Number] ),
+			        DIMDATE[Is Fiscal Past Month] = TRUE (),
+			        DIMDATE[Is Fiscal Current Year] = TRUE ()
 			    )
 			RETURN
-			CALCULATE(
-			    [GL Amount],
-			    DimDate[Fiscal Month Number] <= ElapsedFiscalMonths,
-			    DimDate[Is Fiscal Previous Year] = TRUE()
-			)
+			    CALCULATE (
+			        [GL Amount],
+			        DIMDATE[Fiscal Month Number] <= ElapsedFiscalMonths,
+			        DIMDATE[Is Fiscal Previous Year] = TRUE ()
+			    )
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/TimeBased
 		lineageTag: 267550f8-05ff-4596-b59c-46efe23d2b00
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
-
-	measure 'Monthly Transaction' = COUNTROWS ( SUMMARIZE ( FACTGENERALLEDGER, DIMDATE[Calendar Month Key] ) )
-		formatString: 0
-		displayFolder: KPI/Basic
-		lineageTag: bea8d664-a1d2-44bf-a74f-4b75f98846a5
 
 	column 'General Ledger Key'
 		dataType: string

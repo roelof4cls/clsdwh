@@ -6,8 +6,8 @@ table DIMBANKACCOUNT
 		lineageTag: 0c0b2140-488f-4170-9a32-f02ed2416ec9
 
 	column 'Bank Account Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: efb21d45-b533-4f17-ad4f-f9056d91bd0a
 		summarizeBy: none
@@ -43,8 +43,8 @@ table DIMBANKACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Bank Account ID'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: d43f6605-969d-492d-b124-609eb564773a
 		summarizeBy: none
@@ -91,8 +91,8 @@ table DIMBANKACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Entity Code'
-		isHidden
 		dataType: string
+		isHidden
 		lineageTag: f87235dd-679a-444a-ba90-b25214966d7a
 		summarizeBy: none
 		sourceColumn: Entity Code

@@ -6,8 +6,8 @@ table DIMCONTACT
 		lineageTag: 654014bf-4076-4c37-b42a-c247ad581e45
 
 	column 'Contact Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 62ec1a29-c569-4ff1-ace3-f83d31ad10df
 		summarizeBy: none
@@ -70,8 +70,8 @@ table DIMCONTACT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Contact ID'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 4f3bcc53-bdf5-4487-bd37-3799dd316827
 		summarizeBy: none
@@ -139,8 +139,8 @@ table DIMCONTACT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Entity Code'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 93b18bcb-465d-4dd5-8811-7ee07a066bff
 		summarizeBy: none

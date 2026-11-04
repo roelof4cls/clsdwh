@@ -114,8 +114,8 @@ table FACTBALANCE
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	column 'Fact Balance Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: b42fd3bc-039b-4bef-84e1-6c441b98c773
 		summarizeBy: none
@@ -124,8 +124,8 @@ table FACTBALANCE
 		annotation SummarizationSetBy = Automatic
 
 	column 'Date Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 4a38fb92-7214-40f9-b2ee-f0d2d55af284
 		summarizeBy: none
@@ -136,8 +136,8 @@ table FACTBALANCE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Bank Account Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: be4b2376-84bf-4c45-a565-911d94d0e78a
 		summarizeBy: none
@@ -155,8 +155,8 @@ table FACTBALANCE
 		annotation SummarizationSetBy = Automatic
 
 	column vTransactionAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: 4ba2bbe5-6573-470d-bfd0-61abd64cfcad
 		summarizeBy: none
@@ -167,8 +167,8 @@ table FACTBALANCE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Entity Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: ATTRIBUTES
 		lineageTag: 7dba609b-6d1d-4de5-a783-bd49d469936f
 		summarizeBy: none

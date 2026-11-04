@@ -187,8 +187,8 @@ table FACTBUDGETVSACTUAL
 		lineageTag: 0787677d-3e2e-438b-a224-726aa0cff0e6
 
 	column 'Budget Vs Actual Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: f704b2ce-65bd-4b2c-af25-8c8d3e0279f9
 		summarizeBy: none
@@ -197,8 +197,8 @@ table FACTBUDGETVSACTUAL
 		annotation SummarizationSetBy = Automatic
 
 	column 'Date Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: f5d5c7b7-3d41-4f62-a7af-30457932ef6e
 		summarizeBy: none
@@ -209,8 +209,8 @@ table FACTBUDGETVSACTUAL
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Account Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 8ba876c4-4be6-46e8-b2b4-864da80fdc9c
 		summarizeBy: none
@@ -229,8 +229,8 @@ table FACTBUDGETVSACTUAL
 		annotation SummarizationSetBy = Automatic
 
 	column vBudgetAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: dd5be4d0-b88e-4e34-900a-d08f7f7c48e9
 		summarizeBy: none
@@ -241,8 +241,8 @@ table FACTBUDGETVSACTUAL
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vActualAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: f49fee69-5c72-43b4-af7a-da8f074ea5c7
 		summarizeBy: none
@@ -253,8 +253,8 @@ table FACTBUDGETVSACTUAL
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vForecastAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: 8d0539a6-7f83-4c38-8268-07504f9072c6
 		summarizeBy: none
@@ -265,8 +265,8 @@ table FACTBUDGETVSACTUAL
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vProjectAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: a73db32b-5bb4-42d0-b1dc-c5df6343fc01
 		summarizeBy: none
@@ -277,8 +277,8 @@ table FACTBUDGETVSACTUAL
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Entity Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: b81cafc5-35c5-4b69-9054-9c6e5125b09f
 		summarizeBy: none

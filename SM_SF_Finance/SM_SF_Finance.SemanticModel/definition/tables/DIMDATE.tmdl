@@ -3,8 +3,8 @@ table DIMDATE
 	dataCategory: Time
 
 	column 'Date Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: c78afc4a-0a31-4543-8af5-4de348f30f73
 		summarizeBy: none
@@ -51,12 +51,12 @@ table DIMDATE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Calendar Quarter Name'
-		sortByColumn: 'Calendar Quarter Key'
 		dataType: string
 		displayFolder: CALENDAR\ATTRIBUTES
 		lineageTag: d5303554-c30c-485e-b8f5-91100e22cf9c
 		summarizeBy: none
 		sourceColumn: Calendar Quarter Name
+		sortByColumn: 'Calendar Quarter Key'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -72,12 +72,12 @@ table DIMDATE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Calendar Month Name'
-		sortByColumn: 'Calendar Month Key'
 		dataType: string
 		displayFolder: CALENDAR\ATTRIBUTES
 		lineageTag: d85c5405-27dd-4fee-9123-9f6d9069f730
 		summarizeBy: none
 		sourceColumn: Calendar Month Name
+		sortByColumn: 'Calendar Month Key'
 
 		annotation SummarizationSetBy = Automatic
 
@@ -93,8 +93,8 @@ table DIMDATE
 		annotation SummarizationSetBy = Automatic
 
 	column 'Calendar Year Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 36a895a0-ef71-4a7a-be5a-5084f7644a7e
 		summarizeBy: none
@@ -105,8 +105,8 @@ table DIMDATE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Calendar Quarter Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 8e33cb31-33e6-49f9-976c-a68db2b2f98c
 		summarizeBy: none
@@ -117,8 +117,8 @@ table DIMDATE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Calendar Month Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 6ffbee1b-1b7a-4a18-8203-e2b6f05dbb0e
 		summarizeBy: none
@@ -129,18 +129,18 @@ table DIMDATE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Calendar Year Name'
-		sortByColumn: 'Calendar Year Key'
 		dataType: string
 		displayFolder: CALENDAR\ATTRIBUTES
 		lineageTag: 5f15d212-dd39-4e1f-b0b3-f09b162b4500
 		summarizeBy: none
 		sourceColumn: Calendar Year Name
+		sortByColumn: 'Calendar Year Key'
 
 		annotation SummarizationSetBy = Automatic
 
 	column 'Fiscal Year Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 4577b29f-a159-45bf-8b7e-218e6f91ac47
 		summarizeBy: none
@@ -151,8 +151,8 @@ table DIMDATE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Fiscal Quarter Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 92ed21b1-148d-4f56-af88-7e76a5baefbc
 		summarizeBy: none
@@ -163,8 +163,8 @@ table DIMDATE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Fiscal Month Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 6c550009-5072-4cbf-aab8-217f42468bb2
 		summarizeBy: none
@@ -208,32 +208,32 @@ table DIMDATE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Fiscal Year Name'
-		sortByColumn: 'Fiscal Year Key'
 		dataType: string
 		displayFolder: FISCAL\ATTRIBUTES
 		lineageTag: f79f41da-a68c-47e6-9bf3-c5afd77b6834
 		summarizeBy: none
 		sourceColumn: Fiscal Year Name
+		sortByColumn: 'Fiscal Year Key'
 
 		annotation SummarizationSetBy = Automatic
 
 	column 'Fiscal Quarter Name'
-		sortByColumn: 'Fiscal Quarter Key'
 		dataType: string
 		displayFolder: FISCAL\ATTRIBUTES
 		lineageTag: 7c5a2211-7df4-4fcd-a5b2-28447f935bad
 		summarizeBy: none
 		sourceColumn: Fiscal Quarter Name
+		sortByColumn: 'Fiscal Quarter Key'
 
 		annotation SummarizationSetBy = Automatic
 
 	column 'Fiscal Month Name'
-		sortByColumn: 'Fiscal Month Key'
 		dataType: string
 		displayFolder: FISCAL\ATTRIBUTES
 		lineageTag: 22e5d1d6-cf22-43f2-8b3f-a3180e554e7b
 		summarizeBy: none
 		sourceColumn: Fiscal Month Name
+		sortByColumn: 'Fiscal Month Key'
 
 		annotation SummarizationSetBy = Automatic
 

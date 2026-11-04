@@ -2,8 +2,8 @@ table DIMENTITY
 	lineageTag: 4cb90b2b-0be3-4efb-9f4a-511cdfdc3620
 
 	column 'Entity Key'
-		isHidden
 		dataType: string
+		isHidden
 		lineageTag: 9567f884-e2ad-43dc-af6e-66adfceebced
 		summarizeBy: none
 		sourceColumn: Entity Key

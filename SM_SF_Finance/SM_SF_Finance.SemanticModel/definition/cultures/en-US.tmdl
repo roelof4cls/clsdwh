@@ -2,29 +2,15 @@ cultureInfo en-US
 
 	linguisticMetadata =
 			{
-			  "Version": "2.0.0",
+			  "Version": "1.0.0",
 			  "Language": "en-US",
 			  "Entities": {
 			    "factgeneralledger.total_vat_incl": {
-			      "Definition": {
-			        "Binding": {
-			          "ConceptualEntity": "FACTGENERALLEDGER",
-			          "ConceptualProperty": "Total (VAT Incl)"
-			        }
+			      "Binding": {
+			        "ConceptualEntity": "FACTGENERALLEDGER",
+			        "ConceptualProperty": "Total (VAT Incl)"
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Total": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    }
 			  }
 			}

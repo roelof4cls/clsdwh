@@ -6,8 +6,8 @@ table DIMACCOUNT
 		lineageTag: 8257c1d5-2669-4418-ac26-0190ac13332b
 
 	column 'Account Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: d37c7048-009c-4cbf-b305-88fb2e892483
 		summarizeBy: none
@@ -99,8 +99,8 @@ table DIMACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Account ID'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 0ae65074-57f4-4baa-9270-003727ce66e9
 		summarizeBy: none
@@ -109,8 +109,8 @@ table DIMACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Account Category Order'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 7e487e2c-ce33-45fe-b6c0-36b45d713fe8
 		summarizeBy: none
@@ -119,8 +119,8 @@ table DIMACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Account Order'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 55d561b0-f20d-4206-bb12-6489a8ebf293
 		summarizeBy: none
@@ -138,8 +138,8 @@ table DIMACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Entity Code'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 06d41f6b-e0de-4401-8fd1-b18ee4ac5996
 		summarizeBy: none
@@ -157,8 +157,8 @@ table DIMACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Account Sub Sub Category Order'
-		isHidden
 		dataType: string
+		isHidden
 		lineageTag: e655914c-5e3b-4417-aae9-43528ebd13ed
 		summarizeBy: none
 		sourceColumn: Account Sub Sub Category Order
@@ -166,8 +166,8 @@ table DIMACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Account Sub Category Sort'
-		isHidden
 		dataType: string
+		isHidden
 		lineageTag: 7ec76ad9-d89a-4b6c-9d37-d6fe47c2d662
 		summarizeBy: none
 		sourceColumn: Account Sub Category Sort
@@ -175,8 +175,8 @@ table DIMACCOUNT
 		annotation SummarizationSetBy = Automatic
 
 	column 'Account Sort'
-		isHidden
 		dataType: string
+		isHidden
 		lineageTag: 3499a32b-50c3-49bf-8825-76a94ff9c207
 		summarizeBy: none
 		sourceColumn: Account Sort

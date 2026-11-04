@@ -183,8 +183,8 @@ table FACTGENERALLEDGER
 		lineageTag: bea8d664-a1d2-44bf-a74f-4b75f98846a5
 
 	column 'General Ledger Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: b1bce055-2967-4ef3-aa9d-fb58f6dd1686
 		summarizeBy: none
@@ -193,8 +193,8 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column 'Date Key'
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: KEYS
 		lineageTag: e356760a-52f9-49d4-8825-f5cc7142f72c
 		summarizeBy: none
@@ -205,8 +205,8 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Contact Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: e5dd2921-a41f-4049-8852-86310d097ae9
 		summarizeBy: none
@@ -215,8 +215,8 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column 'Account Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 67a29c9f-f623-466b-a649-1abe780bb4f1
 		summarizeBy: none
@@ -225,8 +225,8 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column 'Bank Account Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 130de8b3-8eba-4019-bd30-a603e5a9a1c6
 		summarizeBy: none
@@ -289,8 +289,8 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column vQuantity
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: a4174388-ff1d-42a8-805c-e3a0b8022d9c
 		summarizeBy: none
@@ -301,8 +301,8 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vUnitAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: 31fbca94-7ae1-48ec-884a-f9268e050ea7
 		summarizeBy: none
@@ -313,8 +313,8 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vLineAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: 99fdeb39-600a-4416-ba1a-873618332a17
 		summarizeBy: none
@@ -325,8 +325,8 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vTaxAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: 2fce1104-3c86-4c80-9327-8d10a3d7313b
 		summarizeBy: none
@@ -337,8 +337,8 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vDebitAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: 7e3f9f64-01eb-486e-9ce8-728fbc8a28b7
 		summarizeBy: none
@@ -349,8 +349,8 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vCreditAmount
-		isHidden
 		dataType: double
+		isHidden
 		displayFolder: VALUES
 		lineageTag: 2d6b5a64-bb15-41ee-aaec-df10563af5d8
 		summarizeBy: none
@@ -361,8 +361,8 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Entity Key'
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 9f4ebd50-1aa6-4d22-9145-abe4a5f7aa13
 		summarizeBy: none
@@ -389,8 +389,8 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column TRANSACTIONID
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: f9dac0cf-5c10-401d-bc28-0def1b144d42
 		summarizeBy: none
@@ -399,8 +399,8 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column TRANSACTIONSUBID
-		isHidden
 		dataType: string
+		isHidden
 		displayFolder: KEYS
 		lineageTag: 88c74780-2093-437e-91ae-9b0228eca2ad
 		summarizeBy: none

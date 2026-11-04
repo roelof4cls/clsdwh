@@ -1,0 +1,17 @@
+{
+  "resources": [
+    {
+      "resourceId": "rId0",
+      "sourceType": 5,
+      "file": "resources/PBI_CV_886A053E_9DFD_4EA0_A47D_CCAEB89AF969.pbiviz.json"
+    }
+  ],
+  "visual": {
+    "guid": "PBI_CV_886A053E_9DFD_4EA0_A47D_CCAEB89AF969"
+  },
+  "metadata": {
+    "pbivizjson": {
+      "resourceId": "rId0"
+    }
+  }
+}

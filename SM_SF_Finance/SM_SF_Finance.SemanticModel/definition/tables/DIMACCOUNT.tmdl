@@ -1,0 +1,207 @@
+table DIMACCOUNT
+	lineageTag: 47bde03a-059b-4860-a7aa-a01e964ecb41
+
+	measure AccountFilterCount = COUNT(FACTGENERALLEDGER[General Ledger Key]) + COUNT(FACTBUDGETVSACTUAL[Budget Vs Actual Key])
+		formatString: 0
+		lineageTag: 8257c1d5-2669-4418-ac26-0190ac13332b
+
+	column 'Account Key'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: d37c7048-009c-4cbf-b305-88fb2e892483
+		summarizeBy: none
+		sourceColumn: Account Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Code'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: f9cfae43-305e-466a-9448-83246f3df9e9
+		summarizeBy: none
+		sourceColumn: Account Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Account
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 2e06c2f5-ab6d-42c7-ab10-fe9ab5c50b3c
+		summarizeBy: none
+		sourceColumn: Account
+		sortByColumn: 'Account Order'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Category'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: dadd1ad9-84bd-41ab-992e-7db1c52a78e8
+		summarizeBy: none
+		sourceColumn: Account Category
+		sortByColumn: 'Account Category Order'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Sub Category'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 69640ce5-3be3-470e-b427-d3566f0099b1
+		summarizeBy: none
+		sourceColumn: Account Sub Category
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Status'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 7af8697d-4e60-48d9-a0ad-303584cd455c
+		summarizeBy: none
+		sourceColumn: Account Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Essential'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: ATTRIBUTES
+		lineageTag: b1fcadad-1ba6-457e-87bc-4d9efb0169ee
+		summarizeBy: none
+		sourceColumn: Is Essential
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Once Off'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: ATTRIBUTES
+		lineageTag: 9ce60a0a-5c53-4deb-8489-125191a54956
+		summarizeBy: none
+		sourceColumn: Is Once Off
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Budgetable'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: ATTRIBUTES
+		lineageTag: f3187011-5419-48cf-8167-691a3277ffac
+		summarizeBy: none
+		sourceColumn: Is Budgetable
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account ID'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 0ae65074-57f4-4baa-9270-003727ce66e9
+		summarizeBy: none
+		sourceColumn: Account ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Category Order'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 7e487e2c-ce33-45fe-b6c0-36b45d713fe8
+		summarizeBy: none
+		sourceColumn: Account Category Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Order'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 55d561b0-f20d-4206-bb12-6489a8ebf293
+		summarizeBy: none
+		sourceColumn: Account Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column CAT = TRIM(DIMACCOUNT[Account Category])
+		displayFolder: ATTRIBUTES
+		lineageTag: 66b7e930-699d-4f17-a417-744b62937882
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column SCAT = TRIM(DIMACCOUNT[Account Sub Category])
+		displayFolder: ATTRIBUTES
+		lineageTag: 78247b46-4ad6-4c99-a7f9-349534f881e0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Group'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: ada43be1-b03f-490d-ac65-141a0b7f84b1
+		summarizeBy: none
+		sourceColumn: Account Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Entity Code'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 06d41f6b-e0de-4401-8fd1-b18ee4ac5996
+		summarizeBy: none
+		sourceColumn: Entity Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Entity Account Code'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: d80a115c-6dbf-47c8-b8ff-84d8c9b40733
+		summarizeBy: none
+		sourceColumn: Entity Account Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Sub Sub Category Order'
+		dataType: string
+		lineageTag: e655914c-5e3b-4417-aae9-43528ebd13ed
+		summarizeBy: none
+		sourceColumn: Account Sub Sub Category Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Sub Category Sort'
+		dataType: string
+		lineageTag: 7ec76ad9-d89a-4b6c-9d37-d6fe47c2d662
+		summarizeBy: none
+		sourceColumn: Account Sub Category Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Sort'
+		dataType: string
+		lineageTag: 3499a32b-50c3-49bf-8825-76a94ff9c207
+		summarizeBy: none
+		sourceColumn: Account Sort
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIMACCOUNT = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("LNJLAGM-CN49845.snowflakecomputing.com","POWERBI_WH",[Implementation="2.0"]),
+				    CLS_Database = Source{[Name="CLS",Kind="Database"]}[Data],
+				    SEMANTIC_Schema = CLS_Database{[Name="SEMANTIC",Kind="Schema"]}[Data],
+				    VW_SEM_DIMACCOUNT_View = SEMANTIC_Schema{[Name="VW_SEM_DIMACCOUNT_LIVE",Kind="View"]}[Data],
+				    #"Trimmed Text" = Table.TransformColumns(VW_SEM_DIMACCOUNT_View,{{"Account", Text.Trim, type text}, {"Account Category", Text.Trim, type text}, {"Account Sub Category", Text.Trim, type text}})
+				in
+				    #"Trimmed Text"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

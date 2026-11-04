@@ -1,0 +1,17 @@
+{
+  "resources": [
+    {
+      "resourceId": "rId0",
+      "sourceType": 5,
+      "file": "resources/BulletChart1443347686880.pbiviz.json"
+    }
+  ],
+  "visual": {
+    "guid": "BulletChart1443347686880"
+  },
+  "metadata": {
+    "pbivizjson": {
+      "resourceId": "rId0"
+    }
+  }
+}

@@ -1,0 +1,440 @@
+table FACTGENERALLEDGER
+	lineageTag: 912bf3f2-6ddb-4da7-9066-8b6ba7729ffe
+
+	measure Credit = SUM(FACTGENERALLEDGER[vCreditAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/Basic
+		lineageTag: 11877ec3-2620-465e-b4b9-34611fc686f5
+
+		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+
+	measure Debit = SUm(FACTGENERALLEDGER[vDebitAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/Basic
+		lineageTag: 794c2ece-3c6b-408f-841d-4edb931e4801
+
+		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+
+	measure 'Total (VAT Incl)' = SUm(FACTGENERALLEDGER[vLineAmount])+SUM(FACTGENERALLEDGER[vTaxAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/Basic
+		lineageTag: c18aa417-de2f-42f5-9d13-0a1c03c16e39
+
+		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+
+	measure 'Total (VAT Excl)' = SUm(FACTGENERALLEDGER[vLineAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/Basic
+		lineageTag: d2f6bb45-3ee4-41f3-91a2-60cefee5f2ff
+
+		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+
+	measure Tax = SUm(FACTGENERALLEDGER[vTaxAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/Basic
+		lineageTag: 81c96208-352e-469a-8748-906924066825
+
+		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+
+	measure Transactions = DISTINCTCOUNT(FACTGENERALLEDGER[General Ledger Key])
+		formatString: 0
+		displayFolder: KPI/Basic
+		lineageTag: bbcc2d65-4364-47eb-8ca2-1e956880d104
+
+	measure 'Med Amount' = MEDIAN(FACTGENERALLEDGER[vLineAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/Basic
+		lineageTag: e7eb2c6a-7e93-4328-82cb-69588d092131
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	measure 'Running Total (VAT Incl)' =
+			
+			CALCULATE(
+				[Total (VAT Incl)],
+				FILTER(
+					ALLSELECTED('DIMDATE'[Date]),
+					ISONORAFTER('DIMDATE'[Date], MAX('DIMDATE'[Date]), DESC)
+				)
+			)
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI
+		lineageTag: b9b44de8-ca38-47f4-ae85-15e95748982e
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "RunningTotal"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+
+	measure 'Rolling GL Amount FY' =
+			
+			CALCULATE (
+			    [GL Amount],
+			    DATESYTD (
+			        DimDate[Date],
+			        "02-28"
+			    )
+			)
+		displayFolder: KPI
+		lineageTag: b1dfaf4e-dca0-4458-8135-30c29621f6a4
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'GL Amount' = [Total (VAT Incl)]
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/Basic
+		lineageTag: 81c45caf-f737-446d-b557-a5720bd54f62
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	measure 'GL Amount PY' =
+			
+			CALCULATE(
+			    [GL Amount],
+			    SAMEPERIODLASTYEAR(DimDate[Date])
+			)
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/TimeBased
+		lineageTag: 73061422-92cd-4851-9c73-0e7c69524847
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	measure 'GL Amount PM' =
+			
+			CALCULATE(
+			    [GL Amount],
+			    DATEADD(DimDate[Date], -1, MONTH)
+			)
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
+		displayFolder: KPI/TimeBased
+		lineageTag: b321351d-61e6-4f68-a54f-020134f7bc3d
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
+
+	measure 'GL Amount YoY %' =
+			
+			VAR CurrentAmt = [GL Amount]
+			VAR PriorAmt = [GL Amount PY]
+			RETURN
+			DIVIDE(CurrentAmt - PriorAmt, PriorAmt)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: KPI/TimeBased
+		lineageTag: 0aa446a0-e409-4fe2-85ed-43f8dafce57e
+
+	measure 'GL Amount MoM %' =
+			
+			VAR CurrentAmt = [GL Amount]
+			VAR PriorAmt = [GL Amount PM]
+			RETURN
+			DIVIDE(CurrentAmt - PriorAmt, PriorAmt)
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: KPI/TimeBased
+		lineageTag: 67a99db0-e8fd-4464-a778-a61e058f02d5
+
+	measure 'GL Amount Comparable' =
+			
+			VAR ElapsedFiscalMonths =
+			    CALCULATE(
+			        MAX(DimDate[Fiscal Month Number]),
+			        DimDate[Is Fiscal Past Month] = TRUE(),
+			        DimDate[Is Fiscal Current Year] = TRUE()
+			    )
+			RETURN
+			CALCULATE(
+			    [GL Amount],
+			    DimDate[Fiscal Month Number] <= ElapsedFiscalMonths,
+			    DimDate[Is Fiscal Current Year] = TRUE()
+			)
+		displayFolder: KPI/TimeBased
+		lineageTag: 4a178ff2-febb-4699-843b-27f9ad1728d0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'GL Amount PY Comparable' =
+			
+			VAR ElapsedFiscalMonths =
+			    CALCULATE(
+			        MAX(DimDate[Fiscal Month Number]),
+			        DimDate[Is Fiscal Past Month] = TRUE(),
+			        DimDate[Is Fiscal Current Year] = TRUE()
+			    )
+			RETURN
+			CALCULATE(
+			    [GL Amount],
+			    DimDate[Fiscal Month Number] <= ElapsedFiscalMonths,
+			    DimDate[Is Fiscal Previous Year] = TRUE()
+			)
+		displayFolder: KPI/TimeBased
+		lineageTag: 267550f8-05ff-4596-b59c-46efe23d2b00
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Elapsed Fiscal Months (Debug)' =
+			
+			CALCULATE(
+			    MAX(DimDate[Fiscal Month Number]),
+			    DimDate[Is Fiscal Past Month] = TRUE(),
+			    DimDate[Is Fiscal Current Year] = TRUE()
+			)
+		displayFolder: KPI/TimeBased
+		lineageTag: dde60bd5-f6d9-47be-90ee-c87433668363
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Monthly Transaction' = DISTINCTCOUNT(FACTGENERALLEDGER[TMonth])
+		formatString: 0
+		displayFolder: KPI/Basic
+		lineageTag: bea8d664-a1d2-44bf-a74f-4b75f98846a5
+
+	column 'General Ledger Key'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: b1bce055-2967-4ef3-aa9d-fb58f6dd1686
+		summarizeBy: none
+		sourceColumn: General Ledger Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date Key'
+		dataType: double
+		displayFolder: KEYS
+		lineageTag: e356760a-52f9-49d4-8825-f5cc7142f72c
+		summarizeBy: none
+		sourceColumn: Date Key
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Contact Key'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: e5dd2921-a41f-4049-8852-86310d097ae9
+		summarizeBy: none
+		sourceColumn: Contact Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Account Key'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 67a29c9f-f623-466b-a649-1abe780bb4f1
+		summarizeBy: none
+		sourceColumn: Account Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bank Account Key'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 130de8b3-8eba-4019-bd30-a603e5a9a1c6
+		summarizeBy: none
+		sourceColumn: Bank Account Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Source Type'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 2a1a6e7d-fd3e-4fc2-9987-24fe20e72a24
+		summarizeBy: none
+		sourceColumn: Source Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Transaction Type'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 9db715fe-755b-496a-959b-6e89da87138c
+		summarizeBy: none
+		sourceColumn: Transaction Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Transaction Number'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: a8b00b14-a976-41d1-94b0-3f4c70a70d04
+		summarizeBy: none
+		sourceColumn: Transaction Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column Reference
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 20911893-24fc-4e83-b318-984ef9db79b7
+		summarizeBy: none
+		sourceColumn: Reference
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: c403e4a9-6c1f-402a-b63f-a4dcc08a1109
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tax Type'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: e1e8186f-156b-4113-a02d-f39a482839c8
+		summarizeBy: none
+		sourceColumn: Tax Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column vQuantity
+		dataType: double
+		displayFolder: VALUES
+		lineageTag: a4174388-ff1d-42a8-805c-e3a0b8022d9c
+		summarizeBy: sum
+		sourceColumn: vQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vUnitAmount
+		dataType: double
+		displayFolder: VALUES
+		lineageTag: 31fbca94-7ae1-48ec-884a-f9268e050ea7
+		summarizeBy: sum
+		sourceColumn: vUnitAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vLineAmount
+		dataType: double
+		displayFolder: VALUES
+		lineageTag: 99fdeb39-600a-4416-ba1a-873618332a17
+		summarizeBy: sum
+		sourceColumn: vLineAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vTaxAmount
+		dataType: double
+		displayFolder: VALUES
+		lineageTag: 2fce1104-3c86-4c80-9327-8d10a3d7313b
+		summarizeBy: sum
+		sourceColumn: vTaxAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vDebitAmount
+		dataType: double
+		displayFolder: VALUES
+		lineageTag: 7e3f9f64-01eb-486e-9ce8-728fbc8a28b7
+		summarizeBy: sum
+		sourceColumn: vDebitAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column vCreditAmount
+		dataType: double
+		displayFolder: VALUES
+		lineageTag: 2d6b5a64-bb15-41ee-aaec-df10563af5d8
+		summarizeBy: sum
+		sourceColumn: vCreditAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Entity Key'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 9f4ebd50-1aa6-4d22-9145-abe4a5f7aa13
+		summarizeBy: none
+		sourceColumn: Entity Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column Division
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 266d5841-cd1e-485a-9d1b-8437f3d6726e
+		summarizeBy: none
+		sourceColumn: Division
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub Account'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 7514a86a-1aec-4368-85d6-c0e673b1a125
+		summarizeBy: none
+		sourceColumn: Sub Account
+
+		annotation SummarizationSetBy = Automatic
+
+	column TRANSACTIONID
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: f9dac0cf-5c10-401d-bc28-0def1b144d42
+		summarizeBy: none
+		sourceColumn: TRANSACTIONID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TRANSACTIONSUBID
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 88c74780-2093-437e-91ae-9b0228eca2ad
+		summarizeBy: none
+		sourceColumn: TRANSACTIONSUBID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Column = RELATED(DIMDATE[Date])
+		formatString: General Date
+		displayFolder: KPI/Basic
+		lineageTag: 09df2326-9b3f-48b2-9bb0-a2640ed6ca46
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: b43a971d-60f5-44e5-853e-a5e26e7ae5f6
+			defaultHierarchy: LocalDateTable_7aa00127-7ceb-421f-9edf-b0ecc2c541e1.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column TMonth = RELATED(DIMDATE[Month Full Name])
+		displayFolder: KEYS
+		lineageTag: 4ab1a483-ab40-4bf9-b2bd-210bd4a9abfe
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FACTGENERALLEDGER = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("LNJLAGM-CN49845.snowflakecomputing.com","POWERBI_WH",[Implementation="2.0"]),
+				    CLS_Database = Source{[Name="CLS",Kind="Database"]}[Data],
+				    SEMANTIC_Schema = CLS_Database{[Name="SEMANTIC",Kind="Schema"]}[Data],
+				    VW_SEM_FACTGENERALLEDGER_View = SEMANTIC_Schema{[Name="VW_SEM_FACTGENERALLEDGER_LIVE",Kind="View"]}[Data]
+				in
+				    VW_SEM_FACTGENERALLEDGER_View
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

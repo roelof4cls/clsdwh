@@ -1,0 +1,42 @@
+table DIMENTITY
+	lineageTag: 4cb90b2b-0be3-4efb-9f4a-511cdfdc3620
+
+	column 'Entity Key'
+		dataType: string
+		lineageTag: 9567f884-e2ad-43dc-af6e-66adfceebced
+		summarizeBy: none
+		sourceColumn: Entity Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Entity Code'
+		dataType: string
+		lineageTag: 3ca1bf82-8475-4c41-a176-14cdaab7f4c7
+		summarizeBy: none
+		sourceColumn: Entity Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Entity
+		dataType: string
+		lineageTag: 36667eeb-379a-412a-a7ba-12a3b46218b4
+		summarizeBy: none
+		sourceColumn: Entity
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIMENTITY = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("LNJLAGM-CN49845.snowflakecomputing.com","POWERBI_WH",[Implementation="2.0"]),
+				    CLS_Database = Source{[Name="CLS",Kind="Database"]}[Data],
+				    SEMANTIC_Schema = CLS_Database{[Name="SEMANTIC",Kind="Schema"]}[Data],
+				    VW_SEM_DIMENTITY_View = SEMANTIC_Schema{[Name="VW_SEM_DIMENTITY_LIVE",Kind="View"]}[Data]
+				in
+				    VW_SEM_DIMENTITY_View
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,180 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 127.67217762509607
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1429.0168962069934,
+            "y": 364.03587322067307
+          },
+          "nodeIndex": "DIMACCOUNT",
+          "nodeLineageTag": "47bde03a-059b-4860-a7aa-a01e964ecb41",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 1088.0024652752709,
+            "y": 378.4697951183457
+          },
+          "nodeIndex": "DIMBANKACCOUNT",
+          "nodeLineageTag": "99c8f7a8-b1e7-4ef4-8af4-edf0fd80d6f5",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 779.42227530157322,
+            "y": 253.17200735503752
+          },
+          "nodeIndex": "DIMCONTACT",
+          "nodeLineageTag": "6a48cffe-074f-4dc0-b71d-daf9fe440ab9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 492.17729017642779,
+            "y": 392.95846473726124
+          },
+          "nodeIndex": "DIMDATE",
+          "nodeLineageTag": "0a0579a7-f32b-42d9-866c-65d4453e2be4",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 912.35391499999969,
+            "y": 1327.4456576312605
+          },
+          "nodeIndex": "DIMENTITY",
+          "nodeLineageTag": "4cb90b2b-0be3-4efb-9f4a-511cdfdc3620",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 1320.6709976616562,
+            "y": 807.18755711834558
+          },
+          "nodeIndex": "FACTBALANCE",
+          "nodeLineageTag": "30aa81bc-1693-48a0-9e2e-70b78fc466fe",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 321.18470820475716,
+            "y": 820.8615516876522
+          },
+          "nodeIndex": "FACTBUDGETVSACTUAL",
+          "nodeLineageTag": "35aa7f1d-2d15-4e87-b6c3-5ce9a3492ba9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 671.6453741484512,
+            "y": 821.662835660354
+          },
+          "nodeIndex": "FACTGENERALLEDGER",
+          "nodeLineageTag": "912bf3f2-6ddb-4da7-9066-8b6ba7729ffe",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 992.1635433015731,
+            "y": 791.19240740299892
+          },
+          "nodeIndex": "FACTFORECAST",
+          "nodeLineageTag": "4850a088-8964-4802-a858-c658b3f5a414",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 1802.6584866257836,
+            "y": 804.86307113348141
+          },
+          "nodeIndex": "TRACKER_LOG_BOOK",
+          "nodeLineageTag": "7eb2cc96-12a4-4b3c-bcfc-27eb1f117cec",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 10
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 63.2870877232341,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    },
+    {
+      "ordinal": 1,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 135.14566978946675,
+            "y": 0
+          },
+          "nodeIndex": "DIMDATE",
+          "nodeLineageTag": "0a0579a7-f32b-42d9-866c-65d4453e2be4",
+          "size": {
+            "height": 1000,
+            "width": 475
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Layout 1",
+      "zoomValue": 76,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

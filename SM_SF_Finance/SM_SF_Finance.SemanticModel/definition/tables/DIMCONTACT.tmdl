@@ -1,0 +1,162 @@
+table DIMCONTACT
+	lineageTag: 6a48cffe-074f-4dc0-b71d-daf9fe440ab9
+
+	measure ContactFilterCount = COUNT(FACTGENERALLEDGER[General Ledger Key])
+		formatString: 0
+		lineageTag: 654014bf-4076-4c37-b42a-c247ad581e45
+
+	column 'Contact Key'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 62ec1a29-c569-4ff1-ace3-f83d31ad10df
+		summarizeBy: none
+		sourceColumn: Contact Key
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contact Code'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 216aec73-fc2a-4d68-ad31-075a841930d2
+		summarizeBy: none
+		sourceColumn: Contact Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Contact
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: c9f04b9d-2687-46f6-876f-05697a4adf22
+		summarizeBy: none
+		sourceColumn: Contact
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contact Status'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 37523551-c302-4c18-b59e-6284d897bd25
+		summarizeBy: none
+		sourceColumn: Contact Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contact Type'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: b2f45768-3e9c-44da-aa18-2027936a0e98
+		summarizeBy: none
+		sourceColumn: Contact Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Account Code'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: 0be9305c-105f-4718-8f78-46ff4fe96e94
+		summarizeBy: none
+		sourceColumn: Sales Account Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Purchases Account Code'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: aa59c1ad-d184-477b-8788-4cd33c7c0361
+		summarizeBy: none
+		sourceColumn: Purchases Account Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contact ID'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 4f3bcc53-bdf5-4487-bd37-3799dd316827
+		summarizeBy: none
+		sourceColumn: Contact ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Customer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: ATTRIBUTES
+		lineageTag: 6e377cd2-13b6-4e43-b373-71101f890b7d
+		summarizeBy: none
+		sourceColumn: Customer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Contract House'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: ATTRIBUTES
+		lineageTag: a0acc62f-e545-4312-9cf2-208f88c12306
+		summarizeBy: none
+		sourceColumn: Contract House
+
+		annotation SummarizationSetBy = Automatic
+
+	column Contractor
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: ATTRIBUTES
+		lineageTag: 3817de92-3598-4bb2-aee6-3b8a676310a7
+		summarizeBy: none
+		sourceColumn: Contractor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Supplier
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: ATTRIBUTES
+		lineageTag: b48fad53-e91a-4f18-9e00-ededdcc3f8c4
+		summarizeBy: none
+		sourceColumn: Supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Fixed Expense Supplier'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		displayFolder: ATTRIBUTES
+		lineageTag: 81eca323-b6e8-4db5-a075-33bf899a6037
+		summarizeBy: none
+		sourceColumn: Fixed Expense Supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Entity Contact Code'
+		dataType: string
+		displayFolder: ATTRIBUTES
+		lineageTag: fb6a1966-6584-4b97-b934-c5dad8816e7f
+		summarizeBy: none
+		sourceColumn: Entity Contact Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Entity Code'
+		dataType: string
+		displayFolder: KEYS
+		lineageTag: 93b18bcb-465d-4dd5-8811-7ee07a066bff
+		summarizeBy: none
+		sourceColumn: Entity Code
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DIMCONTACT = m
+		mode: import
+		source =
+				let
+				    Source = Snowflake.Databases("LNJLAGM-CN49845.snowflakecomputing.com","POWERBI_WH",[Implementation="2.0"]),
+				    CLS_Database = Source{[Name="CLS",Kind="Database"]}[Data],
+				    SEMANTIC_Schema = CLS_Database{[Name="SEMANTIC",Kind="Schema"]}[Data],
+				    VW_SEM_DIMCONTACT_View = SEMANTIC_Schema{[Name="VW_SEM_DIMCONTACT_LIVE",Kind="View"]}[Data]
+				in
+				    VW_SEM_DIMCONTACT_View
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

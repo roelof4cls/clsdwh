@@ -1,10 +1,6 @@
-/// Xero chart of accounts, one set per entity.
+/// Xero chart of accounts, one set per entity. Entity does not filter this table: on Account slicers add the visual filter 'Account In Selected Entity is 1'.
 table Account
 	lineageTag: 47bde03a-059b-4860-a7aa-a01e964ecb41
-
-	measure AccountFilterCount = COUNT('General Ledger'[General Ledger Key]) + COUNT('Budget vs Actual'[Budget Vs Actual Key])
-		formatString: 0
-		lineageTag: 8257c1d5-2669-4418-ac26-0190ac13332b
 
 	column 'Account Key'
 		dataType: string

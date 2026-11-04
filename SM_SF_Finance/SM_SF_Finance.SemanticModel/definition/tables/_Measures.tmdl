@@ -72,7 +72,7 @@ table _Measures
 
 	/// Cumulative Total (VAT Incl) over the selected dates.
 	measure 'Running Total (VAT Incl)' =
-
+			
 			CALCULATE(
 				[Total (VAT Incl)],
 				FILTER(
@@ -96,7 +96,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'GL Amount YTD' =
-
+			
 			VAR AsOfDate = MAX ( 'Date'[Date] )
 			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
 			RETURN
@@ -130,7 +130,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'GL Amount YoY %' =
-
+			
 			VAR CurrentAmt = [GL Amount]
 			VAR PriorAmt = [GL Amount PY]
 			RETURN
@@ -141,7 +141,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'GL Amount MoM %' =
-
+			
 			VAR CurrentAmt = [GL Amount]
 			VAR PriorAmt = [GL Amount PM]
 			RETURN
@@ -152,7 +152,7 @@ table _Measures
 
 	/// GL Amount for the current fiscal year up to the last completed fiscal month.
 	measure 'GL Amount Comparable' =
-
+			
 			VAR ElapsedFiscalMonths =
 			    CALCULATE (
 			        MAX ( 'Date'[Fiscal Month Number] ),
@@ -173,7 +173,7 @@ table _Measures
 
 	/// GL Amount for the previous fiscal year over the same number of fiscal months as GL Amount Comparable.
 	measure 'GL Amount PY Comparable' =
-
+			
 			VAR ElapsedFiscalMonths =
 			    CALCULATE (
 			        MAX ( 'Date'[Fiscal Month Number] ),
@@ -240,7 +240,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'Actual YTD' =
-
+			
 			VAR AsOfDate = MAX ( 'Date'[Date] )
 			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
 			RETURN
@@ -258,7 +258,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'Budget YTD' =
-
+			
 			VAR AsOfDate = MAX ( 'Date'[Date] )
 			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
 			RETURN
@@ -276,7 +276,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'Forecast YTD' =
-
+			
 			VAR AsOfDate = MAX ( 'Date'[Date] )
 			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
 			RETURN
@@ -294,7 +294,7 @@ table _Measures
 
 	/// Forecast from the last date in context to the end of that fiscal year.
 	measure 'Forecast Remaining FY' =
-
+			
 			VAR AsOfDate = MAX ( 'Date'[Date] )
 			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
 			RETURN
@@ -328,7 +328,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'Budget YoY Variance %' =
-
+			
 			VAR PriorBudget = [Budget PY]
 			RETURN
 			    DIVIDE ( [Budget] - PriorBudget, ABS ( PriorBudget ) )
@@ -376,7 +376,7 @@ table _Measures
 
 	/// Bank balance at the last date in context: the fiscal year's opening BALANCE row plus movements up to that date. Never later than the last balance transaction; blank for periods entirely after it.
 	measure 'Closing Balance' =
-
+			
 			VAR LastTransactionDate =
 			    CALCULATE ( MAXX ( 'Bank Balance', RELATED ( 'Date'[Date] ) ), REMOVEFILTERS ( 'Date' ) )
 			VAR AsOfDate = MIN ( MAX ( 'Date'[Date] ), LastTransactionDate )
@@ -399,7 +399,7 @@ table _Measures
 
 	/// Closing Balance at the end of the month before the last date in context.
 	measure 'Closing Balance PM' =
-
+			
 			VAR LastTransactionDate =
 			    CALCULATE ( MAXX ( 'Bank Balance', RELATED ( 'Date'[Date] ) ), REMOVEFILTERS ( 'Date' ) )
 			VAR AsOfDate = MIN ( MAX ( 'Date'[Date] ), LastTransactionDate )
@@ -417,7 +417,7 @@ table _Measures
 
 	/// Direction of Closing Balance compared with Closing Balance PM.
 	measure 'Balance Trend MoM' =
-
+			
 			VAR CurrentBalance = [Closing Balance]
 			VAR PriorBalance = [Closing Balance PM]
 			RETURN
@@ -443,7 +443,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'Cash Flow Total YTD' =
-
+			
 			VAR AsOfDate = MAX ( 'Date'[Date] )
 			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
 			RETURN
@@ -493,7 +493,7 @@ table _Measures
 
 	/// Archived: use the Time Intelligence calculation group instead.
 	measure 'Cash Flow Total Excl Safety Net YTD' =
-
+			
 			VAR AsOfDate = MAX ( 'Date'[Date] )
 			VAR AsOfFiscalYear = MAX ( 'Date'[Fiscal Year] )
 			RETURN
@@ -509,6 +509,39 @@ table _Measures
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
+	/// Slicer helper: 1 when the account belongs to an entity in the current Entity selection. Add to Account slicers as a visual filter 'is 1'.
+	measure 'Account In Selected Entity' =
+			
+			IF (
+			    NOT ISEMPTY ( INTERSECT ( VALUES ( Account[Entity Code] ), VALUES ( Entity[Entity Code] ) ) ),
+			    1
+			)
+		formatString: 0
+		displayFolder: Helpers
+		lineageTag: 8257c1d5-2669-4418-ac26-0190ac13332b
+
+	/// Slicer helper: 1 when the contact belongs to an entity in the current Entity selection. Add to Contact slicers as a visual filter 'is 1'.
+	measure 'Contact In Selected Entity' =
+			
+			IF (
+			    NOT ISEMPTY ( INTERSECT ( VALUES ( Contact[Entity Code] ), VALUES ( Entity[Entity Code] ) ) ),
+			    1
+			)
+		formatString: 0
+		displayFolder: Helpers
+		lineageTag: 654014bf-4076-4c37-b42a-c247ad581e45
+
+	/// Slicer helper: 1 when the bank account belongs to an entity in the current Entity selection. Add to Bank Account slicers as a visual filter 'is 1'.
+	measure 'Bank Account In Selected Entity' =
+			
+			IF (
+			    NOT ISEMPTY ( INTERSECT ( VALUES ( 'Bank Account'[Entity Code] ), VALUES ( Entity[Entity Code] ) ) ),
+			    1
+			)
+		formatString: 0
+		displayFolder: Helpers
+		lineageTag: 0c0b2140-488f-4170-9a32-f02ed2416ec9
+
 	column Value
 		dataType: int64
 		isHidden
@@ -523,3 +556,4 @@ table _Measures
 	partition _Measures = calculated
 		mode: import
 		source = {0}
+

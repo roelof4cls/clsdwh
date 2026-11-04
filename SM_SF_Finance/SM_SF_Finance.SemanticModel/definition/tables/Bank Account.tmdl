@@ -1,10 +1,6 @@
-/// Xero bank accounts, one set per entity.
+/// Xero bank accounts, one set per entity. Entity does not filter this table: on Bank Account slicers add the visual filter 'Bank Account In Selected Entity is 1'.
 table 'Bank Account'
 	lineageTag: 99c8f7a8-b1e7-4ef4-8af4-edf0fd80d6f5
-
-	measure BankAccountFilterCount = COUNT('General Ledger'[General Ledger Key]) + COUNT('Bank Balance'[Fact Balance Key])
-		formatString: 0
-		lineageTag: 0c0b2140-488f-4170-9a32-f02ed2416ec9
 
 	column 'Bank Account Key'
 		dataType: string

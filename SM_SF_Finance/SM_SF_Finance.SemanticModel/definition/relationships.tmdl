@@ -50,8 +50,3 @@ relationship AutoDetected_3869ddc9-b0b7-43cd-8931-1a92f28235df
 	fromColumn: 'Cash Flow Forecast'.'Entity Key'
 	toColumn: Entity.'Entity Key'
 
-relationship AutoDetected_e6190cb8-ee33-4180-abe7-a0cb2ab841ad
-	isActive: false
-	fromColumn: 'Bank Account'.'Entity Code'
-	toColumn: Entity.'Entity Code'
-

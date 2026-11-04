@@ -1,10 +1,6 @@
-/// Xero contacts (customers, suppliers, contractors), one set per entity.
+/// Xero contacts (customers, suppliers, contractors), one set per entity. Entity does not filter this table: on Contact slicers add the visual filter 'Contact In Selected Entity is 1'.
 table Contact
 	lineageTag: 6a48cffe-074f-4dc0-b71d-daf9fe440ab9
-
-	measure ContactFilterCount = COUNT('General Ledger'[General Ledger Key])
-		formatString: 0
-		lineageTag: 654014bf-4076-4c37-b42a-c247ad581e45
 
 	column 'Contact Key'
 		dataType: string

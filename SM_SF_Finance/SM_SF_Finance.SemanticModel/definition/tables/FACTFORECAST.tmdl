@@ -6,7 +6,7 @@ table FACTFORECAST
 		displayFolder: KPI
 		lineageTag: bb75455b-f653-4b8e-a468-c78fd947f1fe
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Forecast FY' =
 			
@@ -21,31 +21,35 @@ table FACTFORECAST
 		displayFolder: KPI
 		lineageTag: de32dfab-838c-4810-92e0-cc9ad5b50dfe
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Total Forecast' = SUm(FACTFORECAST[vForecastAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 037c39dc-88b4-4eb4-91ae-ead782e8b16a
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Total Balance' = SUM(FACTFORECAST[vBalanceAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: afc2c148-0170-4ef3-93f6-c87069324dac
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Total Safety Net' = SUM(FACTFORECAST[vSafetynetAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: ae83ab2a-ab88-41b2-a39e-11a5575fcfb0
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Total Amount Excl' = SUM(FACTFORECAST[vBalanceAmount])+SUM(FACTFORECAST[vForecastAmount])
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 8ca854f0-66e6-42f9-b784-2a894e10cafd
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Forecast FY Excl' =
 			
@@ -56,12 +60,14 @@ table FACTFORECAST
 			        "02-28"
 			    )
 			)
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 0afb7194-8fe9-4117-8c9b-16afa4d6ddaf
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	column 'Fact Balance Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: fa28184d-4685-4d60-9b5d-7ac4f841bd6e
@@ -71,6 +77,7 @@ table FACTFORECAST
 		annotation SummarizationSetBy = Automatic
 
 	column 'Date Key'
+		isHidden
 		dataType: double
 		displayFolder: KEYS
 		lineageTag: 75d10339-8c19-4fde-90f1-e89f64385e93
@@ -82,6 +89,7 @@ table FACTFORECAST
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Entity Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: bee492c0-f865-4749-85ce-1820a7ad34fc
@@ -91,35 +99,38 @@ table FACTFORECAST
 		annotation SummarizationSetBy = Automatic
 
 	column vForecastAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 099b1dea-5eab-4198-93cf-33f4a2018e80
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vForecastAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vBalanceAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 67e520fd-4364-4152-827f-23897747ab5a
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vBalanceAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vSafetynetAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 850c574a-dd62-4a8d-a255-467c7aa0b3d7
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vSafetynetAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 

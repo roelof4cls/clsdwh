@@ -50,11 +50,6 @@ relationship AutoDetected_3869ddc9-b0b7-43cd-8931-1a92f28235df
 	fromColumn: FACTFORECAST.'Entity Key'
 	toColumn: DIMENTITY.'Entity Key'
 
-relationship b43a971d-60f5-44e5-853e-a5e26e7ae5f6
-	joinOnDateBehavior: datePartOnly
-	fromColumn: FACTGENERALLEDGER.Column
-	toColumn: LocalDateTable_7aa00127-7ceb-421f-9edf-b0ecc2c541e1.Date
-
 relationship AutoDetected_e6190cb8-ee33-4180-abe7-a0cb2ab841ad
 	isActive: false
 	fromColumn: DIMBANKACCOUNT.'Entity Code'

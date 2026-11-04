@@ -6,7 +6,7 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
-annotation __PBI_TimeIntelligenceEnabled = 1
+annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_QueryOrder = ["DIMENTITY","DIMDATE","DIMACCOUNT","DIMCONTACT","DIMBANKACCOUNT","FACTBALANCE","FACTBUDGETVSACTUAL","FACTGENERALLEDGER","FACTFORECAST"]
 
@@ -21,8 +21,6 @@ ref table FACTBUDGETVSACTUAL
 ref table FACTGENERALLEDGER
 ref table DIMENTITY
 ref table FACTFORECAST
-ref table DateTableTemplate_39d2b3bc-a7fc-4fcd-a1f1-175b2f8435f2
-ref table LocalDateTable_7aa00127-7ceb-421f-9edf-b0ecc2c541e1
 
 ref cultureInfo en-US
 

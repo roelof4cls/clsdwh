@@ -9,7 +9,7 @@ table FACTBALANCE
 		displayFolder: KPI
 		lineageTag: 216088dd-e629-40de-9aa0-305ba4875b54
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Rolling Balance FY' = ```
 			
@@ -26,7 +26,7 @@ table FACTBALANCE
 		displayFolder: KPI
 		lineageTag: 65e79d55-f602-421b-82bd-759ed01a5946
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Balance Trend CM vs PM' = ```
 			
@@ -57,10 +57,11 @@ table FACTBALANCE
 			                && DIMDATE[Date] <= EndDate
 			        )
 			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 35a80dad-a4e0-42a0-ab94-0032343cc434
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Balance Current Month' =
 			
@@ -79,10 +80,11 @@ table FACTBALANCE
 			                && DIMDATE[Date] <= EndDate
 			        )
 			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: 53c74db9-7043-464c-80f2-d3e9f1bf55cd
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Month End Balance' =
 			
@@ -98,18 +100,21 @@ table FACTBALANCE
 			                    = MAX ( DIMDATE[Fiscal Year] )
 			        )
 			    )
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: b13a440b-43c6-4444-a9ea-c181f201a5eb
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Movement Amount' = CALCULATE(SUM(FACTBALANCE[vTransactionAmount]),FACTBALANCE[Transaction Type]<>"BALANCE")
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: a1a99168-6b80-47cb-9e09-2bc485b8767b
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	column 'Fact Balance Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: b42fd3bc-039b-4bef-84e1-6c441b98c773
@@ -119,6 +124,7 @@ table FACTBALANCE
 		annotation SummarizationSetBy = Automatic
 
 	column 'Date Key'
+		isHidden
 		dataType: double
 		displayFolder: KEYS
 		lineageTag: 4a38fb92-7214-40f9-b2ee-f0d2d55af284
@@ -130,6 +136,7 @@ table FACTBALANCE
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Bank Account Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: be4b2376-84bf-4c45-a565-911d94d0e78a
@@ -148,17 +155,19 @@ table FACTBALANCE
 		annotation SummarizationSetBy = Automatic
 
 	column vTransactionAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 4ba2bbe5-6573-470d-bfd0-61abd64cfcad
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vTransactionAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Entity Key'
+		isHidden
 		dataType: string
 		displayFolder: ATTRIBUTES
 		lineageTag: 7dba609b-6d1d-4de5-a783-bd49d469936f

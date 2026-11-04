@@ -6,35 +6,35 @@ table FACTGENERALLEDGER
 		displayFolder: KPI/Basic
 		lineageTag: 11877ec3-2620-465e-b4b9-34611fc686f5
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure Debit = SUm(FACTGENERALLEDGER[vDebitAmount])
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: 794c2ece-3c6b-408f-841d-4edb931e4801
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Total (VAT Incl)' = SUm(FACTGENERALLEDGER[vLineAmount])+SUM(FACTGENERALLEDGER[vTaxAmount])
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: c18aa417-de2f-42f5-9d13-0a1c03c16e39
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Total (VAT Excl)' = SUm(FACTGENERALLEDGER[vLineAmount])
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: d2f6bb45-3ee4-41f3-91a2-60cefee5f2ff
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure Tax = SUm(FACTGENERALLEDGER[vTaxAmount])
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/Basic
 		lineageTag: 81c96208-352e-469a-8748-906924066825
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure Transactions = DISTINCTCOUNT(FACTGENERALLEDGER[General Ledger Key])
 		formatString: 0
@@ -69,7 +69,7 @@ table FACTGENERALLEDGER
 
 		changedProperty = FormatString
 
-		annotation PBI_FormatHint = {"currencyCulture":"af-ZA"}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'Rolling GL Amount FY' =
 			
@@ -80,10 +80,11 @@ table FACTGENERALLEDGER
 			        "02-28"
 			    )
 			)
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI
 		lineageTag: b1dfaf4e-dca0-4458-8135-30c29621f6a4
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'GL Amount' = [Total (VAT Incl)]
 		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
@@ -150,10 +151,11 @@ table FACTGENERALLEDGER
 			    DimDate[Fiscal Month Number] <= ElapsedFiscalMonths,
 			    DimDate[Is Fiscal Current Year] = TRUE()
 			)
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/TimeBased
 		lineageTag: 4a178ff2-febb-4699-843b-27f9ad1728d0
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
 	measure 'GL Amount PY Comparable' =
 			
@@ -169,29 +171,19 @@ table FACTGENERALLEDGER
 			    DimDate[Fiscal Month Number] <= ElapsedFiscalMonths,
 			    DimDate[Is Fiscal Previous Year] = TRUE()
 			)
+		formatString: "R"#,0.00;-"R"#,0.00;"R"#,0.00
 		displayFolder: KPI/TimeBased
 		lineageTag: 267550f8-05ff-4596-b59c-46efe23d2b00
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
+		annotation PBI_FormatHint = {"currencyCulture":"en-ZA"}
 
-	measure 'Elapsed Fiscal Months (Debug)' =
-			
-			CALCULATE(
-			    MAX(DimDate[Fiscal Month Number]),
-			    DimDate[Is Fiscal Past Month] = TRUE(),
-			    DimDate[Is Fiscal Current Year] = TRUE()
-			)
-		displayFolder: KPI/TimeBased
-		lineageTag: dde60bd5-f6d9-47be-90ee-c87433668363
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
-	measure 'Monthly Transaction' = DISTINCTCOUNT(FACTGENERALLEDGER[TMonth])
+	measure 'Monthly Transaction' = COUNTROWS ( SUMMARIZE ( FACTGENERALLEDGER, DIMDATE[Calendar Month Key] ) )
 		formatString: 0
 		displayFolder: KPI/Basic
 		lineageTag: bea8d664-a1d2-44bf-a74f-4b75f98846a5
 
 	column 'General Ledger Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: b1bce055-2967-4ef3-aa9d-fb58f6dd1686
@@ -201,6 +193,7 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column 'Date Key'
+		isHidden
 		dataType: double
 		displayFolder: KEYS
 		lineageTag: e356760a-52f9-49d4-8825-f5cc7142f72c
@@ -212,6 +205,7 @@ table FACTGENERALLEDGER
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Contact Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: e5dd2921-a41f-4049-8852-86310d097ae9
@@ -221,6 +215,7 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column 'Account Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: 67a29c9f-f623-466b-a649-1abe780bb4f1
@@ -230,6 +225,7 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column 'Bank Account Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: 130de8b3-8eba-4019-bd30-a603e5a9a1c6
@@ -293,72 +289,79 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column vQuantity
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: a4174388-ff1d-42a8-805c-e3a0b8022d9c
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vQuantity
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vUnitAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 31fbca94-7ae1-48ec-884a-f9268e050ea7
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vUnitAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vLineAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 99fdeb39-600a-4416-ba1a-873618332a17
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vLineAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vTaxAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 2fce1104-3c86-4c80-9327-8d10a3d7313b
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vTaxAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vDebitAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 7e3f9f64-01eb-486e-9ce8-728fbc8a28b7
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vDebitAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column vCreditAmount
+		isHidden
 		dataType: double
 		displayFolder: VALUES
 		lineageTag: 2d6b5a64-bb15-41ee-aaec-df10563af5d8
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: vCreditAmount
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column 'Entity Key'
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: 9f4ebd50-1aa6-4d22-9145-abe4a5f7aa13
@@ -386,6 +389,7 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column TRANSACTIONID
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: f9dac0cf-5c10-401d-bc28-0def1b144d42
@@ -395,31 +399,12 @@ table FACTGENERALLEDGER
 		annotation SummarizationSetBy = Automatic
 
 	column TRANSACTIONSUBID
+		isHidden
 		dataType: string
 		displayFolder: KEYS
 		lineageTag: 88c74780-2093-437e-91ae-9b0228eca2ad
 		summarizeBy: none
 		sourceColumn: TRANSACTIONSUBID
-
-		annotation SummarizationSetBy = Automatic
-
-	column Column = RELATED(DIMDATE[Date])
-		formatString: General Date
-		displayFolder: KPI/Basic
-		lineageTag: 09df2326-9b3f-48b2-9bb0-a2640ed6ca46
-		summarizeBy: none
-
-		variation Variation
-			isDefault
-			relationship: b43a971d-60f5-44e5-853e-a5e26e7ae5f6
-			defaultHierarchy: LocalDateTable_7aa00127-7ceb-421f-9edf-b0ecc2c541e1.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-	column TMonth = RELATED(DIMDATE[Month Full Name])
-		displayFolder: KEYS
-		lineageTag: 4ab1a483-ab40-4bf9-b2bd-210bd4a9abfe
-		summarizeBy: none
 
 		annotation SummarizationSetBy = Automatic
 
